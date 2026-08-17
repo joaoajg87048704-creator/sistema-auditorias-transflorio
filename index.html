@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Auditorias - Transportadora</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: oklch(97% 0.005 220);
+  --surface: oklch(99% 0.003 220);
+  --surface-alt: oklch(95% 0.008 220);
+  --border: oklch(88% 0.01 220);
+  --text: oklch(20% 0.015 220);
+  --text-secondary: oklch(45% 0.01 220);
+  --text-muted: oklch(60% 0.008 220);
+  --primary: oklch(45% 0.14 175);
+  --primary-light: oklch(92% 0.04 175);
+  --primary-hover: oklch(40% 0.14 175);
+  --accent: oklch(65% 0.18 55);
+  --excellent: oklch(50% 0.15 145);
+  --good: oklch(50% 0.12 250);
+  --regular: oklch(60% 0.15 80);
+  --critical: oklch(50% 0.16 25);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px oklch(20% 0.01 220 / 0.06);
+  --shadow-md: 0 4px 12px oklch(20% 0.01 220 / 0.08);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  font-size: 14px;
+  min-height: 100vh;
+  font-optical-sizing: auto;
+}
+
+#loginScreen {
+  position: fixed; inset: 0; z-index: 99999;
+  background: oklch(18% 0.02 220);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.login-card {
+  background: var(--surface);
+  padding: 48px 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 380px;
+  width: 92%;
+  box-shadow: 0 24px 80px oklch(10% 0.02 220 / 0.5);
+}
+
+.login-brand { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-bottom: 4px; }
+.login-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.login-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 32px; }
+
+.login-input {
+  width: 100%; padding: 14px 16px;
+  border: 2px solid var(--border); border-radius: var(--radius);
+  font-size: 14px; font-family: inherit;
+  text-align: center; transition: border-color 0.2s var(--ease-out);
+  background: var(--bg);
+}
+.login-input:focus { outline: none; border-color: var(--primary); }
+
+.login-btn {
+  width: 100%; padding: 14px; margin-top: 14px;
+  background: var(--primary); color: white;
+  border: none; border-radius: var(--radius);
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: background 0.15s;
+}
+.login-btn:hover { background: var(--primary-hover); }
+.login-error { color: var(--critical); font-size: 12px; margin-top: 12px; display: none; }
+
+#app { display: none; }
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; position: sticky; top: 0; z-index: 100;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-brand { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--primary); }
+.topbar-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.topbar-company { font-size: 12px; color: var(--text-muted); background: var(--surface-alt); padding: 4px 10px; border-radius: 20px; }
+
+.tabs {
+  display: flex; gap: 2px; padding: 8px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.tab-btn {
+  padding: 8px 16px; border: none; background: none;
+  font-size: 13px; font-weight: 500; font-family: inherit;
+  color: var(--text-muted); cursor: pointer;
+  border-radius: 8px; transition: all 0.15s var(--ease-out);
+  white-space: nowrap;
+}
+.tab-btn:hover { background: var(--surface-alt); color: var(--text); }
+.tab-btn.active { background: var(--primary); color: white; font-weight: 600; }
+
+.tab-content { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; }
+.stat-value { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+.ranking-section { margin-top: 24px; }
+.ranking-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+
+.ranking-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--surface); border-radius: var(--radius-lg);
+  overflow: hidden; border: 1px solid var(--border);
+}
+.ranking-table th {
+  text-align: left; padding: 12px 16px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-muted);
+  background: var(--surface-alt); border-bottom: 1px solid var(--border);
+}
+.ranking-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.ranking-table tr:last-child td { border-bottom: none; }
+
+.score-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.score-excellent { background: oklch(92% 0.04 145); color: var(--excellent); }
+.score-good { background: oklch(92% 0.04 250); color: var(--good); }
+.score-regular { background: oklch(92% 0.05 80); color: var(--regular); }
+.score-critical { background: oklch(92% 0.04 25); color: var(--critical); }
+
+.chart-section { margin-top: 32px; }
+.chart-container {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px;
+}
+.chart-canvas { width: 100%; height: 300px; }
+
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+.plan-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.plan-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.plan-card-title { font-size: 14px; font-weight: 700; }
+.plan-card-badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: var(--primary-light); color: var(--primary); }
+
+.plan-team { margin-bottom: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.plan-team:last-child { border-bottom: none; }
+.plan-team-name { font-size: 13px; font-weight: 500; }
+.plan-team-status { font-size: 11px; font-weight: 600; }
+.status-done { color: var(--excellent); }
+.status-pending { color: var(--text-muted); }
+
+.form-header {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;
+}
+.form-header-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.form-field label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 4px; }
+.form-field select, .form-field input {
+  width: 100%; padding: 8px 12px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13px; font-family: inherit; background: var(--bg);
+}
+.form-field select:focus, .form-field input:focus { outline: none; border-color: var(--primary); }
+
+.form-section {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
+}
+.form-section-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+.form-question {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid oklch(92% 0.005 220);
+}
+.form-question:last-child { border-bottom: none; }
+.form-q-number { font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 24px; padding-top: 2px; }
+.form-q-text { flex: 1; font-size: 13px; }
+
+.form-q-options { display: flex; gap: 4px; flex-shrink: 0; }
+.form-q-opt {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1.5px solid var(--border); background: none;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  transition: all 0.12s var(--ease-out); font-family: inherit;
+}
+.form-q-opt:hover { border-color: var(--primary); }
+.form-q-opt.selected-c { background: var(--excellent); border-color: var(--excellent); color: white; }
+.form-q-opt.selected-nc { background: var(--critical); border-color: var(--critical); color: white; }
+.form-q-opt.selected-na { background: var(--text-muted); border-color: var(--text-muted); color: white; }
+
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+.btn {
+  padding: 10px 20px; border-radius: var(--radius);
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  border: none; cursor: pointer; transition: all 0.15s var(--ease-out);
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border); }
+
+.saved-filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-btn {
+  padding: 6px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  border: 1px solid var(--border); background: var(--surface);
+  cursor: pointer; transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+.saved-list { display: grid; gap: 12px; }
+.saved-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: box-shadow 0.15s;
+}
+.saved-item:hover { box-shadow: var(--shadow-md); }
+.saved-item-info { display: flex; align-items: center; gap: 16px; }
+.saved-item-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 6px; }
+.type-frota { background: oklch(90% 0.05 175); color: oklch(35% 0.12 175); }
+.type-doc { background: oklch(90% 0.05 250); color: oklch(35% 0.12 250); }
+.type-motorista { background: oklch(90% 0.05 55); color: oklch(40% 0.14 55); }
+.type-emergencia { background: oklch(90% 0.05 25); color: oklch(40% 0.14 25); }
+
+.saved-item-details { font-size: 13px; }
+.saved-item-details strong { display: block; margin-bottom: 2px; }
+.saved-item-details span { font-size: 11px; color: var(--text-muted); }
+
+.score-display {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 16px 20px;
+  box-shadow: var(--shadow-md); z-index: 50;
+  display: none; min-width: 160px; text-align: center;
+}
+.score-display-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.score-display-value { font-size: 28px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.score-display-class { font-size: 11px; font-weight: 700; margin-top: 2px; }
+
+.clear-btn {
+  margin-left: auto; padding: 8px 14px;
+  background: oklch(55% 0.16 25); color: white;
+  border: none; border-radius: 8px;
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .form-header-grid { grid-template-columns: 1fr; }
+  .tabs { padding: 8px 12px; }
+  .tab-content { padding: 16px; }
+  .dash-grid { grid-template-columns: 1fr 1fr; }
+  .topbar { padding: 0 16px; }
+  .topbar-company { display: none; }
+}
+@media (max-width: 480px) {
+  .dash-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-brand">Engenharia João</div>
+    <div class="login-title">Sistema de Auditorias</div>
+    <div class="login-sub">Transportadora</div>
+    <input id="loginPass" type="password" class="login-input" placeholder="Senha de acesso" autofocus onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <p id="loginError" class="login-error">Senha incorreta</p>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-brand">Auditorias</span>
+      <span class="topbar-title">Transportadora</span>
+    </div>
+    <span class="topbar-company">Transflorio</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('planejamento')">Planejamento</button>
+    <button class="tab-btn" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('frota')">Frota</button>
+    <button class="tab-btn" onclick="switchTab('documentacao')">Documentação</button>
+    <button class="tab-btn" onclick="switchTab('motoristas')">Motoristas</button>
+    <button class="tab-btn" onclick="switchTab('emergencias')">Emergências</button>
+    <button class="tab-btn" onclick="switchTab('salvas')">Auditorias Salvas</button>
+    <button class="clear-btn" onclick="if(confirm('LIMPAR TODOS OS DADOS?')){localStorage.clear();location.reload()}">Limpar Tudo</button>
+  </div>
+
+  <div class="tab-content active" id="tab-planejamento">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Planejamento de Auditorias</h2>
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-card-header"><span class="plan-card-title">Frota / Veículos</span><span class="plan-card-badge">4 rotas</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Capital</span><span class="plan-team-status status-done">92%</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Interior SP</span><span class="plan-team-status status-done">87%</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Interestadual Sul</span><span class="plan-team-status status-pending">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Interestadual NE</span><span class="plan-team-status status-pending">Pendente</span></div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header"><span class="plan-card-title">Documentação</span><span class="plan-card-badge">3 áreas</span></div>
+        <div class="plan-team"><span class="plan-team-name">Licenças e Registros</span><span class="plan-team-status status-done">100%</span></div>
+        <div class="plan-team"><span class="plan-team-name">RNTRC / ANTT</span><span class="plan-team-status status-done">95%</span></div>
+        <div class="plan-team"><span class="plan-team-name">Seguros e Apólices</span><span class="plan-team-status status-pending">Pendente</span></div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header"><span class="plan-card-title">Motoristas</span><span class="plan-card-badge">3 turnos</span></div>
+        <div class="plan-team"><span class="plan-team-name">Turno A (Diurno)</span><span class="plan-team-status status-done">88%</span></div>
+        <div class="plan-team"><span class="plan-team-name">Turno B (Vespertino)</span><span class="plan-team-status status-pending">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Turno C (Noturno)</span><span class="plan-team-status status-pending">Pendente</span></div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header"><span class="plan-card-title">Equipamentos de Emergência</span><span class="plan-card-badge">2 bases</span></div>
+        <div class="plan-team"><span class="plan-team-name">Base Matriz</span><span class="plan-team-status status-done">96%</span></div>
+        <div class="plan-team"><span class="plan-team-name">Base Filial</span><span class="plan-team-status status-pending">Pendente</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-dashboard">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Dashboard</h2>
+    <div class="dash-grid">
+      <div class="stat-card"><div class="stat-label">Média Geral</div><div class="stat-value" style="color:var(--good)">87<span style="font-size:18px">%</span></div><div class="stat-sub">Classificação: Bom</div></div>
+      <div class="stat-card"><div class="stat-label">Auditorias Realizadas</div><div class="stat-value">12</div><div class="stat-sub">Agosto/2026</div></div>
+      <div class="stat-card"><div class="stat-label">Não Conformidades</div><div class="stat-value" style="color:var(--critical)">3</div><div class="stat-sub">2 críticas, 1 maior</div></div>
+      <div class="stat-card"><div class="stat-label">Veículos Auditados</div><div class="stat-value">18</div><div class="stat-sub">de 24 na frota</div></div>
+    </div>
+    <div class="ranking-section">
+      <div class="ranking-title">Ranking por Área</div>
+      <table class="ranking-table">
+        <thead><tr><th>Posição</th><th>Área</th><th>Última Nota</th><th>Média</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1º</strong></td><td>Documentação</td><td>97%</td><td>95%</td><td><span class="score-badge score-excellent">Excelente</span></td></tr>
+          <tr><td><strong>2º</strong></td><td>Equipamentos Emergência</td><td>91%</td><td>88%</td><td><span class="score-badge score-good">Bom</span></td></tr>
+          <tr><td><strong>3º</strong></td><td>Frota / Veículos</td><td>85%</td><td>82%</td><td><span class="score-badge score-good">Bom</span></td></tr>
+          <tr><td><strong>4º</strong></td><td>Motoristas</td><td>78%</td><td>75%</td><td><span class="score-badge score-regular">Regular</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chart-section">
+      <div class="ranking-title">Evolução Mensal</div>
+      <div class="chart-container"><canvas id="evolutionChart" class="chart-canvas"></canvas></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-frota">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Frota</h2>
+    <div class="form-header"><div class="form-header-grid">
+      <div class="form-field"><label>Veículo (Placa)</label><input type="text" placeholder="ABC-1D23"></div>
+      <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome do motorista"></div>
+      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+    </div></div>
+    <div class="form-section"><div class="form-section-title">Condições Gerais do Veículo</div><div id="frota-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title">Sistema de Freios e Suspensão</div><div id="frota-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title">Iluminação e Sinalização</div><div id="frota-perguntas-3"></div></div>
+    <div class="form-section"><div class="form-section-title">Compartimento de Carga</div><div id="frota-perguntas-4"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('frota')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('frota')">Salvar Auditoria</button></div>
+  </div>
+
+  <div class="tab-content" id="tab-documentacao">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Documentação</h2>
+    <div class="form-header"><div class="form-header-grid">
+      <div class="form-field"><label>Veículo / Setor</label><input type="text" placeholder="Placa ou setor"></div>
+      <div class="form-field"><label>Responsável</label><input type="text" placeholder="Quem forneceu os docs"></div>
+      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+    </div></div>
+    <div class="form-section"><div class="form-section-title">Documentação do Veículo</div><div id="doc-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title">Documentação do Motorista</div><div id="doc-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title">Licenças e Registros da Empresa</div><div id="doc-perguntas-3"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('doc')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('documentacao')">Salvar Auditoria</button></div>
+  </div>
+
+  <div class="tab-content" id="tab-motoristas">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Motoristas</h2>
+    <div class="form-header"><div class="form-header-grid">
+      <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome completo"></div>
+      <div class="form-field"><label>Turno</label><select><option>Turno A (Diurno)</option><option>Turno B (Vespertino)</option><option>Turno C (Noturno)</option></select></div>
+      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+    </div></div>
+    <div class="form-section"><div class="form-section-title">Capacitação e Treinamento</div><div id="mot-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title">Uso de EPIs</div><div id="mot-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title">Comportamento e Procedimentos</div><div id="mot-perguntas-3"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('mot')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('motoristas')">Salvar Auditoria</button></div>
+  </div>
+
+  <div class="tab-content" id="tab-emergencias">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Equipamentos de Emergência</h2>
+    <div class="form-header"><div class="form-header-grid">
+      <div class="form-field"><label>Veículo (Placa)</label><input type="text" placeholder="ABC-1D23"></div>
+      <div class="form-field"><label>Base</label><select><option>Base Matriz</option><option>Base Filial</option></select></div>
+      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+    </div></div>
+    <div class="form-section"><div class="form-section-title">Extintores e Combate a Incêndio</div><div id="emer-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title">Kit de Emergência NBR 9735</div><div id="emer-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title">Sinalização e Painéis</div><div id="emer-perguntas-3"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('emer')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('emergencias')">Salvar Auditoria</button></div>
+  </div>
+
+  <div class="tab-content" id="tab-salvas">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditorias Salvas</h2>
+    <div class="saved-filters">
+      <button class="filter-btn active" onclick="filterSaved('all')">Todas</button>
+      <button class="filter-btn" onclick="filterSaved('frota')">Frota</button>
+      <button class="filter-btn" onclick="filterSaved('documentacao')">Documentação</button>
+      <button class="filter-btn" onclick="filterSaved('motoristas')">Motoristas</button>
+      <button class="filter-btn" onclick="filterSaved('emergencias')">Emergências</button>
+    </div>
+    <div class="saved-list" id="savedList"></div>
+  </div>
+</div>
+
+<div class="score-display" id="scoreDisplay">
+  <div class="score-display-label">Pontuação</div>
+  <div class="score-display-value" id="scoreValue">0%</div>
+  <div class="score-display-class" id="scoreClass"></div>
+</div>
+
+<script>
+function doLogin() {
+  const pass = document.getElementById('loginPass').value;
+  if (pass === 'florio') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  const formTabs = ['frota','documentacao','motoristas','emergencias'];
+  document.getElementById('scoreDisplay').style.display = formTabs.includes(tab) ? 'block' : 'none';
+  if (formTabs.includes(tab)) updateScore();
+  if (tab === 'salvas') renderSaved();
+  if (tab === 'dashboard') renderChart();
+}
+
+const questions = {
+  frota: {
+    1: ["Pneus em bom estado (sulco \u22651,6mm, sem bolhas ou cortes)","Estepe presente e em condi\u00e7\u00f5es de uso","Carroceria sem amassados, trincas ou corros\u00e3o que comprometam estrutura","Vidros sem trincas que prejudiquem visibilidade","Espelhos retrovisores \u00edntegros e bem posicionados","Limpadores de para-brisa funcionando corretamente","Portas com fechamento adequado e veda\u00e7\u00e3o","Tanque de combust\u00edvel sem vazamentos vis\u00edveis","Para-choque dianteiro e traseiro \u00edntegros","Prote\u00e7\u00e3o lateral (catarina) presente e fixada"],
+    2: ["Freio de servi\u00e7o com resposta adequada","Freio de estacionamento funcionando","N\u00edvel de fluido de freio dentro do especificado","Reservat\u00f3rio de ar comprimido sem vazamentos","Dreno do reservat\u00f3rio de ar funcional","Molas e amortecedores sem deforma\u00e7\u00f5es vis\u00edveis","Buchas e articula\u00e7\u00f5es sem folga excessiva","Sistema ABS operacional (luz apaga ap\u00f3s partida)"],
+    3: ["Far\u00f3is baixo e alto funcionando","Lanternas traseiras e laterais funcionando","Luzes de freio operacionais","Setas dianteiras e traseiras funcionando","Luz de r\u00e9 funcional","Farol de neblina (se instalado) funcional","Ilumina\u00e7\u00e3o da placa traseira funcional","Faixas refletivas laterais e traseiras em bom estado"],
+    4: ["Assoalho do ba\u00fa/carroceria sem furos ou desgaste","Portas do compartimento de carga com veda\u00e7\u00e3o adequada","Travas e fechaduras do compartimento funcionais","Lona (se aplic\u00e1vel) sem rasgos e com fixa\u00e7\u00e3o firme","Aus\u00eancia de odores ou res\u00edduos de cargas anteriores","Dispositivos de amarra\u00e7\u00e3o (ganchos, cintas) em bom estado","Ventila\u00e7\u00e3o adequada para o tipo de carga","Temperatura controlada (se ba\u00fa frigor\u00edfico) dentro do range"]
+  },
+  doc: {
+    1: ["CRLV do ve\u00edculo dentro da validade","Certificado de inspe\u00e7\u00e3o veicular v\u00e1lido (se exigido)","Ap\u00f3lice de seguro RCTR-C vigente","Licen\u00e7a ambiental de transporte v\u00e1lida","Tac\u00f3grafo com certificado de aferi\u00e7\u00e3o em dia","RNTRC (Registro ANTT) ativo e vinculado ao ve\u00edculo","Autoriza\u00e7\u00e3o Especial de Tr\u00e2nsito (se carga especial)"],
+    2: ["CNH do motorista dentro da validade e categoria adequada","Certificado MOPP v\u00e1lido (se produto perigoso)","Registro de treinamento PAE (Plano Atendimento Emerg\u00eancia)","Exame toxicol\u00f3gico em dia","ASO (Atestado de Sa\u00fade Ocupacional) v\u00e1lido","Curso de dire\u00e7\u00e3o defensiva registrado","Ficha cadastral do motorista atualizada"],
+    3: ["Alvar\u00e1 de funcionamento da empresa vigente","Licen\u00e7a de opera\u00e7\u00e3o ambiental da empresa","AFE/AE ANVISA (se transporte de cosm\u00e9ticos/qu\u00edmicos)","Registro no IBAMA (CTF) ativo","Certificado de regularidade CRQ (se aplic\u00e1vel)","Seguro de Responsabilidade Civil da empresa vigente","Contrato de Responsabilidade T\u00e9cnica arquivado"]
+  },
+  mot: {
+    1: ["MOPP dentro da validade (5 anos)","Treinamento de PAE realizado nos \u00faltimos 12 meses","Curso de dire\u00e7\u00e3o defensiva/econ\u00f4mica atualizado","Conhece os produtos transportados e seus riscos","Sabe localizar e interpretar FISPQ/FDS a bordo","Treinado em primeiros socorros b\u00e1sicos","Conhece o PAE da empresa e sabe acionar emerg\u00eancia"],
+    2: ["Sapato de seguran\u00e7a (bota com biqueira) em bom estado","Luvas de prote\u00e7\u00e3o dispon\u00edveis e adequadas ao produto","\u00d3culos de prote\u00e7\u00e3o dispon\u00edveis no ve\u00edculo","Colete refletivo em bom estado","Protetor auricular dispon\u00edvel (se necess\u00e1rio)","M\u00e1scara/respirador dispon\u00edvel para o tipo de produto","Uniforme limpo e identificado com nome/empresa"],
+    3: ["Realiza inspe\u00e7\u00e3o pr\u00e9-viagem (checklist do motorista)","Respeita limites de velocidade e jornada de trabalho","Utiliza cinto de seguran\u00e7a durante toda a viagem","N\u00e3o utiliza celular ao dirigir","Confere amarra\u00e7\u00e3o da carga antes e durante viagem","Sabe agir em caso de fiscaliza\u00e7\u00e3o (documentos prontos)","Registra ocorr\u00eancias e anomalias no di\u00e1rio de bordo","Comunica ao setor de manuten\u00e7\u00e3o defeitos identificados"]
+  },
+  emer: {
+    1: ["Extintor(es) presente(s) no ve\u00edculo","Tipo de extintor compat\u00edvel com carga transportada","Extintor dentro da validade de recarga","Teste hidrost\u00e1tico do extintor em dia","Extintor fixado adequadamente e acess\u00edvel","Lacre do extintor intacto","Man\u00f4metro na faixa verde (pressurizado)"],
+    2: ["Cones de sinaliza\u00e7\u00e3o presentes (m\u00edn. 4 bi-refletivos)","Cal\u00e7os de roda dispon\u00edveis","Jogo de ferramentas b\u00e1sico completo","Lanterna de emerg\u00eancia funcional (com pilha/bateria)","Tri\u00e2ngulo de sinaliza\u00e7\u00e3o presente","Luvas de nitrila (para produtos qu\u00edmicos)","\u00d3culos de prote\u00e7\u00e3o ampla vis\u00e3o","Material absorvente (vermiculita/manta) para vazamentos","Sacos pl\u00e1sticos de conten\u00e7\u00e3o","Kit de primeiros socorros com itens dentro da validade","Solu\u00e7\u00e3o para lavagem ocular presente"],
+    3: ["Pain\u00e9is de seguran\u00e7a (n\u00ba ONU + n\u00ba risco) corretos e vis\u00edveis","R\u00f3tulos de risco compat\u00edveis com classe do produto","Dimens\u00f5es dos pain\u00e9is dentro do padr\u00e3o (300x400mm)","Fixa\u00e7\u00e3o firme (sem vibra\u00e7\u00e3o, sem risco de queda)","Conserva\u00e7\u00e3o: sem ferrugem, sem descolora\u00e7\u00e3o, leg\u00edvel a 30m","Placas em branco dispon\u00edveis (carga fracionada)","Identifica\u00e7\u00e3o lateral e traseira do ve\u00edculo leg\u00edvel","Sinaliza\u00e7\u00e3o 'PRODUTO PERIGOSO' na traseira (se aplic\u00e1vel)"]
+  }
+};
+
+function renderQuestions(prefix, section, items) {
+  const container = document.getElementById(prefix + '-perguntas-' + section);
+  if (!container) return;
+  let html = '';
+  items.forEach((q, i) => {
+    const id = prefix + '-' + section + '-' + i;
+    html += '<div class="form-question"><span class="form-q-number">' + (i+1) + '</span><span class="form-q-text">' + q + '</span><div class="form-q-options"><button class="form-q-opt" data-id="' + id + '" data-val="c" onclick="selectOpt(this,\'c\')">C</button><button class="form-q-opt" data-id="' + id + '" data-val="nc" onclick="selectOpt(this,\'nc\')">NC</button><button class="form-q-opt" data-id="' + id + '" data-val="na" onclick="selectOpt(this,\'na\')">NA</button></div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function selectOpt(btn, val) {
+  btn.parentElement.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
+  btn.classList.add('selected-' + val);
+  updateScore();
+}
+
+function updateScore() {
+  const activeTab = document.querySelector('.tab-content.active');
+  if (!activeTab) return;
+  const opts = activeTab.querySelectorAll('.form-q-opt.selected-c, .form-q-opt.selected-nc, .form-q-opt.selected-na');
+  let total = 0, conformes = 0;
+  opts.forEach(o => {
+    if (o.classList.contains('selected-c')) { conformes++; total++; }
+    else if (o.classList.contains('selected-nc')) { total++; }
+  });
+  const score = total > 0 ? Math.round((conformes / total) * 100) : 0;
+  const scoreEl = document.getElementById('scoreValue');
+  const classEl = document.getElementById('scoreClass');
+  scoreEl.textContent = score + '%';
+  if (score > 95) { scoreEl.style.color = 'var(--excellent)'; classEl.textContent = 'Excelente'; classEl.style.color = 'var(--excellent)'; }
+  else if (score >= 80) { scoreEl.style.color = 'var(--good)'; classEl.textContent = 'Bom'; classEl.style.color = 'var(--good)'; }
+  else if (score >= 60) { scoreEl.style.color = 'var(--regular)'; classEl.textContent = 'Regular'; classEl.style.color = 'var(--regular)'; }
+  else { scoreEl.style.color = 'var(--critical)'; classEl.textContent = 'Cr\u00edtico'; classEl.style.color = 'var(--critical)'; }
+}
+
+function saveAudit(type) {
+  const activeTab = document.querySelector('.tab-content.active');
+  const inputs = activeTab.querySelectorAll('input, select');
+  const opts = activeTab.querySelectorAll('.form-q-opt.selected-c, .form-q-opt.selected-nc, .form-q-opt.selected-na');
+  if (opts.length === 0) { alert('Preencha pelo menos uma pergunta antes de salvar.'); return; }
+  let total = 0, conformes = 0;
+  opts.forEach(o => {
+    if (o.classList.contains('selected-c')) { conformes++; total++; }
+    else if (o.classList.contains('selected-nc')) { total++; }
+  });
+  const score = total > 0 ? Math.round((conformes / total) * 100) : 0;
+  const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
+  saved.unshift({ id: Date.now(), type: type, date: new Date().toLocaleDateString('pt-BR'), info: inputs[0]?.value || 'Sem identifica\u00e7\u00e3o', score: score, totalQ: opts.length, conformes: conformes });
+  localStorage.setItem('auditorias', JSON.stringify(saved));
+  alert('Auditoria salva!\n\nTipo: ' + type + '\nNota: ' + score + '%\nClassifica\u00e7\u00e3o: ' + getClass(score));
+  clearForm(type === 'documentacao' ? 'doc' : type === 'motoristas' ? 'mot' : type === 'emergencias' ? 'emer' : 'frota');
+}
+
+function getClass(score) {
+  if (score > 95) return 'Excelente';
+  if (score >= 80) return 'Bom';
+  if (score >= 60) return 'Regular';
+  return 'Cr\u00edtico';
+}
+
+function clearForm(prefix) {
+  const activeTab = document.querySelector('.tab-content.active');
+  activeTab.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
+  activeTab.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+  updateScore();
+}
+
+function renderSaved(filter) {
+  const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
+  const list = document.getElementById('savedList');
+  const filtered = filter && filter !== 'all' ? saved.filter(s => s.type === filter) : saved;
+  if (filtered.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px;">Nenhuma auditoria salva ainda.</p>'; return; }
+  list.innerHTML = filtered.map(s => {
+    const typeLabels = { frota:'Frota', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
+    const typeClasses = { frota:'type-frota', documentacao:'type-doc', motoristas:'type-motorista', emergencias:'type-emergencia' };
+    const scoreClass = s.score > 95 ? 'score-excellent' : s.score >= 80 ? 'score-good' : s.score >= 60 ? 'score-regular' : 'score-critical';
+    return '<div class="saved-item"><div class="saved-item-info"><span class="saved-item-type ' + typeClasses[s.type] + '">' + typeLabels[s.type] + '</span><div class="saved-item-details"><strong>' + s.info + '</strong><span>' + s.date + ' \u00b7 ' + s.totalQ + ' perguntas respondidas</span></div></div><span class="score-badge ' + scoreClass + '">' + s.score + '% \u00b7 ' + getClass(s.score) + '</span></div>';
+  }).join('');
+}
+
+function filterSaved(filter) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderSaved(filter);
+}
+
+function renderChart() {
+  const ctx = document.getElementById('evolutionChart');
+  if (!ctx) return;
+  if (window.chartInstance) window.chartInstance.destroy();
+  window.chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago'],
+      datasets: [
+        { label: 'Frota', data: [72, 78, 80, 83, 85, 87], borderColor: 'oklch(45% 0.14 175)', tension: 0.3, borderWidth: 2.5 },
+        { label: 'Documenta\u00e7\u00e3o', data: [88, 90, 92, 94, 95, 97], borderColor: 'oklch(50% 0.12 250)', tension: 0.3, borderWidth: 2.5 },
+        { label: 'Motoristas', data: [60, 65, 68, 72, 74, 78], borderColor: 'oklch(60% 0.15 55)', tension: 0.3, borderWidth: 2.5 },
+        { label: 'Emerg\u00eancias', data: [80, 82, 85, 88, 89, 91], borderColor: 'oklch(50% 0.14 25)', tension: 0.3, borderWidth: 2.5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'Inter', size: 12 } } } },
+      scales: {
+        y: { min: 50, max: 100, ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }, grid: { color: 'oklch(90% 0.005 220)' } },
+        x: { ticks: { font: { family: 'Inter', size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function initApp() {
+  Object.keys(questions.frota).forEach(s => renderQuestions('frota', s, questions.frota[s]));
+  Object.keys(questions.doc).forEach(s => renderQuestions('doc', s, questions.doc[s]));
+  Object.keys(questions.mot).forEach(s => renderQuestions('mot', s, questions.mot[s]));
+  Object.keys(questions.emer).forEach(s => renderQuestions('emer', s, questions.emer[s]));
+}
+</script>
+</body>
+</html>
