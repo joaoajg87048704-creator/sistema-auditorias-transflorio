@@ -112,6 +112,8 @@ body {
 }
 .tab-btn:hover { background: var(--surface-alt); color: var(--text); }
 .tab-btn.active { background: var(--primary); color: white; font-weight: 600; }
+.tab-btn.test-tab { background: oklch(90% 0.06 55); color: oklch(40% 0.14 55); font-weight: 600; }
+.tab-btn.test-tab.active { background: oklch(60% 0.15 55); color: white; }
 
 .tab-content { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
 .tab-content.active { display: block; }
@@ -197,8 +199,21 @@ body {
 .form-section {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
+  position: relative;
 }
-.form-section-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.form-section-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.section-actions { display: flex; gap: 6px; }
+.section-btn {
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 600; font-family: inherit;
+  border: 1px solid var(--border); background: var(--surface-alt);
+  cursor: pointer; transition: all 0.15s;
+}
+.section-btn:hover { border-color: var(--primary); color: var(--primary); }
+.section-btn.restore-btn { display: none; border-color: var(--excellent); color: var(--excellent); }
+.section-btn.restore-btn.visible { display: inline-block; }
+.section-btn.delete-btn { border-color: var(--critical); color: var(--critical); }
+.section-btn.delete-btn:hover { background: oklch(95% 0.03 25); }
 
 .form-question {
   display: flex; align-items: flex-start; gap: 12px;
@@ -230,6 +245,8 @@ body {
 .btn-primary:hover { background: var(--primary-hover); }
 .btn-secondary { background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); }
 .btn-secondary:hover { background: var(--border); }
+.btn-danger { background: oklch(92% 0.04 25); color: var(--critical); border: 1px solid oklch(85% 0.06 25); }
+.btn-danger:hover { background: oklch(88% 0.06 25); }
 
 .saved-filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .filter-btn {
@@ -245,10 +262,11 @@ body {
 .saved-item {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 16px 20px;
-  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
   transition: box-shadow 0.15s;
 }
 .saved-item:hover { box-shadow: var(--shadow-md); }
+.saved-item-header { display: flex; align-items: center; justify-content: space-between; }
 .saved-item-info { display: flex; align-items: center; gap: 16px; }
 .saved-item-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 6px; }
 .type-frota { background: oklch(90% 0.05 175); color: oklch(35% 0.12 175); }
@@ -259,6 +277,17 @@ body {
 .saved-item-details { font-size: 13px; }
 .saved-item-details strong { display: block; margin-bottom: 2px; }
 .saved-item-details span { font-size: 11px; color: var(--text-muted); }
+
+.saved-item-expand {
+  display: none; margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.saved-item-expand.open { display: block; }
+.saved-q-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 12px; }
+.saved-q-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; min-width: 24px; text-align: center; }
+.saved-q-c { background: oklch(92% 0.04 145); color: var(--excellent); }
+.saved-q-nc { background: oklch(92% 0.04 25); color: var(--critical); }
+.saved-q-na { background: oklch(92% 0.02 220); color: var(--text-muted); }
 
 .score-display {
   position: fixed; bottom: 24px; right: 24px;
@@ -271,13 +300,16 @@ body {
 .score-display-value { font-size: 28px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .score-display-class { font-size: 11px; font-weight: 700; margin-top: 2px; }
 
-.clear-btn {
-  margin-left: auto; padding: 8px 14px;
-  background: oklch(55% 0.16 25); color: white;
-  border: none; border-radius: 8px;
-  font-size: 12px; font-weight: 600; font-family: inherit;
-  cursor: pointer;
+.plan-actions { display: flex; gap: 12px; margin-top: 20px; justify-content: flex-end; }
+
+.test-banner {
+  background: oklch(92% 0.06 55); border: 2px dashed oklch(65% 0.15 55);
+  border-radius: var(--radius-lg); padding: 12px 20px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
 }
+.test-banner-icon { font-size: 20px; }
+.test-banner-text { font-size: 13px; font-weight: 600; color: oklch(35% 0.12 55); }
+.test-banner-sub { font-size: 11px; color: oklch(50% 0.1 55); }
 
 @media (max-width: 768px) {
   .form-header-grid { grid-template-columns: 1fr; }
@@ -296,7 +328,7 @@ body {
 
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-brand">Engenharia João</div>
+    <div class="login-brand">Engenharia Jo\u00e3o</div>
     <div class="login-title">Sistema de Auditorias</div>
     <div class="login-sub">Transportadora</div>
     <input id="loginPass" type="password" class="login-input" placeholder="Senha de acesso" autofocus onkeydown="if(event.key==='Enter')doLogin()">
@@ -318,65 +350,63 @@ body {
     <button class="tab-btn active" onclick="switchTab('planejamento')">Planejamento</button>
     <button class="tab-btn" onclick="switchTab('dashboard')">Dashboard</button>
     <button class="tab-btn" onclick="switchTab('frota')">Frota</button>
-    <button class="tab-btn" onclick="switchTab('documentacao')">Documentação</button>
+    <button class="tab-btn" onclick="switchTab('documentacao')">Documenta\u00e7\u00e3o</button>
     <button class="tab-btn" onclick="switchTab('motoristas')">Motoristas</button>
-    <button class="tab-btn" onclick="switchTab('emergencias')">Emergências</button>
+    <button class="tab-btn" onclick="switchTab('emergencias')">Emerg\u00eancias</button>
     <button class="tab-btn" onclick="switchTab('salvas')">Auditorias Salvas</button>
-    <button class="clear-btn" onclick="if(confirm('LIMPAR TODOS OS DADOS?')){localStorage.clear();location.reload()}">Limpar Tudo</button>
+    <button class="tab-btn test-tab" onclick="switchTab('teste')">\u26a0 Teste</button>
   </div>
 
   <div class="tab-content active" id="tab-planejamento">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Planejamento de Auditorias</h2>
-    <div class="plan-grid">
+    <div class="plan-grid" id="planGrid">
       <div class="plan-card">
-        <div class="plan-card-header"><span class="plan-card-title">Frota / Veículos</span><span class="plan-card-badge">4 rotas</span></div>
-        <div class="plan-team"><span class="plan-team-name">Rota Capital</span><span class="plan-team-status status-done">92%</span></div>
-        <div class="plan-team"><span class="plan-team-name">Rota Interior SP</span><span class="plan-team-status status-done">87%</span></div>
-        <div class="plan-team"><span class="plan-team-name">Rota Interestadual Sul</span><span class="plan-team-status status-pending">Pendente</span></div>
-        <div class="plan-team"><span class="plan-team-name">Rota Interestadual NE</span><span class="plan-team-status status-pending">Pendente</span></div>
+        <div class="plan-card-header"><span class="plan-card-title">Frota / Ve\u00edculos</span><span class="plan-card-badge">4 rotas</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Capital</span><span class="plan-team-status" id="plan-frota-1">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Interior SP</span><span class="plan-team-status" id="plan-frota-2">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Interestadual Sul</span><span class="plan-team-status" id="plan-frota-3">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Rota Interestadual NE</span><span class="plan-team-status" id="plan-frota-4">Pendente</span></div>
       </div>
       <div class="plan-card">
-        <div class="plan-card-header"><span class="plan-card-title">Documentação</span><span class="plan-card-badge">3 áreas</span></div>
-        <div class="plan-team"><span class="plan-team-name">Licenças e Registros</span><span class="plan-team-status status-done">100%</span></div>
-        <div class="plan-team"><span class="plan-team-name">RNTRC / ANTT</span><span class="plan-team-status status-done">95%</span></div>
-        <div class="plan-team"><span class="plan-team-name">Seguros e Apólices</span><span class="plan-team-status status-pending">Pendente</span></div>
+        <div class="plan-card-header"><span class="plan-card-title">Documenta\u00e7\u00e3o</span><span class="plan-card-badge">3 \u00e1reas</span></div>
+        <div class="plan-team"><span class="plan-team-name">Licen\u00e7as e Registros</span><span class="plan-team-status" id="plan-doc-1">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">RNTRC / ANTT</span><span class="plan-team-status" id="plan-doc-2">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Seguros e Ap\u00f3lices</span><span class="plan-team-status" id="plan-doc-3">Pendente</span></div>
       </div>
       <div class="plan-card">
         <div class="plan-card-header"><span class="plan-card-title">Motoristas</span><span class="plan-card-badge">3 turnos</span></div>
-        <div class="plan-team"><span class="plan-team-name">Turno A (Diurno)</span><span class="plan-team-status status-done">88%</span></div>
-        <div class="plan-team"><span class="plan-team-name">Turno B (Vespertino)</span><span class="plan-team-status status-pending">Pendente</span></div>
-        <div class="plan-team"><span class="plan-team-name">Turno C (Noturno)</span><span class="plan-team-status status-pending">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Turno A (Diurno)</span><span class="plan-team-status" id="plan-mot-1">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Turno B (Vespertino)</span><span class="plan-team-status" id="plan-mot-2">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Turno C (Noturno)</span><span class="plan-team-status" id="plan-mot-3">Pendente</span></div>
       </div>
       <div class="plan-card">
-        <div class="plan-card-header"><span class="plan-card-title">Equipamentos de Emergência</span><span class="plan-card-badge">2 bases</span></div>
-        <div class="plan-team"><span class="plan-team-name">Base Matriz</span><span class="plan-team-status status-done">96%</span></div>
-        <div class="plan-team"><span class="plan-team-name">Base Filial</span><span class="plan-team-status status-pending">Pendente</span></div>
+        <div class="plan-card-header"><span class="plan-card-title">Equipamentos de Emerg\u00eancia</span><span class="plan-card-badge">2 bases</span></div>
+        <div class="plan-team"><span class="plan-team-name">Base Matriz</span><span class="plan-team-status" id="plan-emer-1">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Base Filial</span><span class="plan-team-status" id="plan-emer-2">Pendente</span></div>
       </div>
+    </div>
+    <div class="plan-actions">
+      <button class="btn btn-danger" onclick="clearPlanejamento()">Limpar Planejamento</button>
     </div>
   </div>
 
   <div class="tab-content" id="tab-dashboard">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Dashboard</h2>
-    <div class="dash-grid">
-      <div class="stat-card"><div class="stat-label">Média Geral</div><div class="stat-value" style="color:var(--good)">87<span style="font-size:18px">%</span></div><div class="stat-sub">Classificação: Bom</div></div>
-      <div class="stat-card"><div class="stat-label">Auditorias Realizadas</div><div class="stat-value">12</div><div class="stat-sub">Agosto/2026</div></div>
-      <div class="stat-card"><div class="stat-label">Não Conformidades</div><div class="stat-value" style="color:var(--critical)">3</div><div class="stat-sub">2 críticas, 1 maior</div></div>
-      <div class="stat-card"><div class="stat-label">Veículos Auditados</div><div class="stat-value">18</div><div class="stat-sub">de 24 na frota</div></div>
+    <div class="dash-grid" id="dashGrid">
+      <div class="stat-card"><div class="stat-label">M\u00e9dia Geral</div><div class="stat-value" id="dash-media">--</div><div class="stat-sub" id="dash-media-class">Sem dados</div></div>
+      <div class="stat-card"><div class="stat-label">Auditorias Realizadas</div><div class="stat-value" id="dash-total">0</div><div class="stat-sub" id="dash-total-sub">Total</div></div>
+      <div class="stat-card"><div class="stat-label">N\u00e3o Conformidades</div><div class="stat-value" id="dash-nc" style="color:var(--critical)">0</div><div class="stat-sub" id="dash-nc-sub">Total NC registradas</div></div>
+      <div class="stat-card"><div class="stat-label">Melhor \u00c1rea</div><div class="stat-value" id="dash-melhor" style="font-size:18px">--</div><div class="stat-sub" id="dash-melhor-sub"></div></div>
     </div>
     <div class="ranking-section">
-      <div class="ranking-title">Ranking por Área</div>
+      <div class="ranking-title">Ranking por \u00c1rea</div>
       <table class="ranking-table">
-        <thead><tr><th>Posição</th><th>Área</th><th>Última Nota</th><th>Média</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td><strong>1º</strong></td><td>Documentação</td><td>97%</td><td>95%</td><td><span class="score-badge score-excellent">Excelente</span></td></tr>
-          <tr><td><strong>2º</strong></td><td>Equipamentos Emergência</td><td>91%</td><td>88%</td><td><span class="score-badge score-good">Bom</span></td></tr>
-          <tr><td><strong>3º</strong></td><td>Frota / Veículos</td><td>85%</td><td>82%</td><td><span class="score-badge score-good">Bom</span></td></tr>
-          <tr><td><strong>4º</strong></td><td>Motoristas</td><td>78%</td><td>75%</td><td><span class="score-badge score-regular">Regular</span></td></tr>
-        </tbody>
+        <thead><tr><th>Posi\u00e7\u00e3o</th><th>\u00c1rea</th><th>\u00daltima Nota</th><th>M\u00e9dia</th><th>Status</th></tr></thead>
+        <tbody id="dashRanking"></tbody>
       </table>
     </div>
     <div class="chart-section">
-      <div class="ranking-title">Evolução Mensal</div>
+      <div class="ranking-title">Evolu\u00e7\u00e3o por Auditoria</div>
       <div class="chart-container"><canvas id="evolutionChart" class="chart-canvas"></canvas></div>
     </div>
   </div>
@@ -384,54 +414,54 @@ body {
   <div class="tab-content" id="tab-frota">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Frota</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Veículo (Placa)</label><input type="text" placeholder="ABC-1D23"></div>
-      <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome do motorista"></div>
-      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+      <div class="form-field"><label>Ve\u00edculo (Placa)</label><input type="text" placeholder="ABC-1D23" id="frota-input-placa"></div>
+      <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome do motorista" id="frota-input-motorista"></div>
+      <div class="form-field"><label>Data</label><input type="date" id="frota-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title">Condições Gerais do Veículo</div><div id="frota-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title">Sistema de Freios e Suspensão</div><div id="frota-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title">Iluminação e Sinalização</div><div id="frota-perguntas-3"></div></div>
-    <div class="form-section"><div class="form-section-title">Compartimento de Carga</div><div id="frota-perguntas-4"></div></div>
-    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('frota')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('frota')">Salvar Auditoria</button></div>
+    <div class="form-section"><div class="form-section-title"><span>Condi\u00e7\u00f5es Gerais do Ve\u00edculo</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-1" onclick="restoreSection('frota',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',1)">Apagar</button></div></div><div id="frota-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Sistema de Freios e Suspens\u00e3o</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-2" onclick="restoreSection('frota',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',2)">Apagar</button></div></div><div id="frota-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Ilumina\u00e7\u00e3o e Sinaliza\u00e7\u00e3o</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-3" onclick="restoreSection('frota',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',3)">Apagar</button></div></div><div id="frota-perguntas-3"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Compartimento de Carga</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-4" onclick="restoreSection('frota',4)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',4)">Apagar</button></div></div><div id="frota-perguntas-4"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('frota')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('frota')">Salvar Auditoria</button></div>
   </div>
 
   <div class="tab-content" id="tab-documentacao">
-    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Documentação</h2>
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Documenta\u00e7\u00e3o</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Veículo / Setor</label><input type="text" placeholder="Placa ou setor"></div>
-      <div class="form-field"><label>Responsável</label><input type="text" placeholder="Quem forneceu os docs"></div>
-      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+      <div class="form-field"><label>Ve\u00edculo / Setor</label><input type="text" placeholder="Placa ou setor" id="doc-input-setor"></div>
+      <div class="form-field"><label>Respons\u00e1vel</label><input type="text" placeholder="Quem forneceu os docs" id="doc-input-resp"></div>
+      <div class="form-field"><label>Data</label><input type="date" id="doc-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title">Documentação do Veículo</div><div id="doc-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title">Documentação do Motorista</div><div id="doc-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title">Licenças e Registros da Empresa</div><div id="doc-perguntas-3"></div></div>
-    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('doc')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('documentacao')">Salvar Auditoria</button></div>
+    <div class="form-section"><div class="form-section-title"><span>Documenta\u00e7\u00e3o do Ve\u00edculo</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-1" onclick="restoreSection('doc',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',1)">Apagar</button></div></div><div id="doc-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Documenta\u00e7\u00e3o do Motorista</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-2" onclick="restoreSection('doc',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',2)">Apagar</button></div></div><div id="doc-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Licen\u00e7as e Registros da Empresa</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-3" onclick="restoreSection('doc',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',3)">Apagar</button></div></div><div id="doc-perguntas-3"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('doc')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('documentacao')">Salvar Auditoria</button></div>
   </div>
 
   <div class="tab-content" id="tab-motoristas">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Motoristas</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome completo"></div>
-      <div class="form-field"><label>Turno</label><select><option>Turno A (Diurno)</option><option>Turno B (Vespertino)</option><option>Turno C (Noturno)</option></select></div>
-      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+      <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome completo" id="mot-input-nome"></div>
+      <div class="form-field"><label>Turno</label><select id="mot-input-turno"><option>Turno A (Diurno)</option><option>Turno B (Vespertino)</option><option>Turno C (Noturno)</option></select></div>
+      <div class="form-field"><label>Data</label><input type="date" id="mot-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title">Capacitação e Treinamento</div><div id="mot-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title">Uso de EPIs</div><div id="mot-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title">Comportamento e Procedimentos</div><div id="mot-perguntas-3"></div></div>
-    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('mot')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('motoristas')">Salvar Auditoria</button></div>
+    <div class="form-section"><div class="form-section-title"><span>Capacita\u00e7\u00e3o e Treinamento</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-1" onclick="restoreSection('mot',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',1)">Apagar</button></div></div><div id="mot-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Uso de EPIs</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-2" onclick="restoreSection('mot',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',2)">Apagar</button></div></div><div id="mot-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Comportamento e Procedimentos</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-3" onclick="restoreSection('mot',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',3)">Apagar</button></div></div><div id="mot-perguntas-3"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('mot')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('motoristas')">Salvar Auditoria</button></div>
   </div>
 
   <div class="tab-content" id="tab-emergencias">
-    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Equipamentos de Emergência</h2>
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Equipamentos de Emerg\u00eancia</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Veículo (Placa)</label><input type="text" placeholder="ABC-1D23"></div>
-      <div class="form-field"><label>Base</label><select><option>Base Matriz</option><option>Base Filial</option></select></div>
-      <div class="form-field"><label>Data</label><input type="date" value="2026-08-17"></div>
+      <div class="form-field"><label>Ve\u00edculo (Placa)</label><input type="text" placeholder="ABC-1D23" id="emer-input-placa"></div>
+      <div class="form-field"><label>Base</label><select id="emer-input-base"><option>Base Matriz</option><option>Base Filial</option></select></div>
+      <div class="form-field"><label>Data</label><input type="date" id="emer-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title">Extintores e Combate a Incêndio</div><div id="emer-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title">Kit de Emergência NBR 9735</div><div id="emer-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title">Sinalização e Painéis</div><div id="emer-perguntas-3"></div></div>
-    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('emer')">Limpar</button><button class="btn btn-primary" onclick="saveAudit('emergencias')">Salvar Auditoria</button></div>
+    <div class="form-section"><div class="form-section-title"><span>Extintores e Combate a Inc\u00eandio</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-1" onclick="restoreSection('emer',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',1)">Apagar</button></div></div><div id="emer-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Kit de Emerg\u00eancia NBR 9735</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-2" onclick="restoreSection('emer',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',2)">Apagar</button></div></div><div id="emer-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Sinaliza\u00e7\u00e3o e Pain\u00e9is</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-3" onclick="restoreSection('emer',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',3)">Apagar</button></div></div><div id="emer-perguntas-3"></div></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('emer')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('emergencias')">Salvar Auditoria</button></div>
   </div>
 
   <div class="tab-content" id="tab-salvas">
@@ -439,21 +469,46 @@ body {
     <div class="saved-filters">
       <button class="filter-btn active" onclick="filterSaved('all')">Todas</button>
       <button class="filter-btn" onclick="filterSaved('frota')">Frota</button>
-      <button class="filter-btn" onclick="filterSaved('documentacao')">Documentação</button>
+      <button class="filter-btn" onclick="filterSaved('documentacao')">Documenta\u00e7\u00e3o</button>
       <button class="filter-btn" onclick="filterSaved('motoristas')">Motoristas</button>
-      <button class="filter-btn" onclick="filterSaved('emergencias')">Emergências</button>
+      <button class="filter-btn" onclick="filterSaved('emergencias')">Emerg\u00eancias</button>
     </div>
     <div class="saved-list" id="savedList"></div>
+  </div>
+
+  <div class="tab-content" id="tab-teste">
+    <div class="test-banner">
+      <span class="test-banner-icon">\u26a0\ufe0f</span>
+      <div><div class="test-banner-text">MODO TESTE</div><div class="test-banner-sub">Dados aqui s\u00e3o independentes. Nada afeta o sistema oficial.</div></div>
+    </div>
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Ambiente de Teste</h2>
+    <div class="form-header"><div class="form-header-grid">
+      <div class="form-field"><label>Tipo de Auditoria</label><select id="teste-tipo"><option value="frota">Frota</option><option value="documentacao">Documenta\u00e7\u00e3o</option><option value="motoristas">Motoristas</option><option value="emergencias">Emerg\u00eancias</option></select></div>
+      <div class="form-field"><label>Identifica\u00e7\u00e3o</label><input type="text" placeholder="Teste livre" id="teste-id"></div>
+      <div class="form-field"><label>Data</label><input type="date" id="teste-data"></div>
+    </div></div>
+    <div id="teste-form-area"></div>
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="clearTeste()">Limpar Teste</button>
+      <button class="btn btn-primary" onclick="saveTeste()">Salvar Teste</button>
+    </div>
+    <div style="margin-top:24px;">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;">Testes Salvos</h3>
+      <div id="testeList" class="saved-list"></div>
+    </div>
+    <div class="plan-actions"><button class="btn btn-danger" onclick="if(confirm('Limpar todos os testes?')){localStorage.removeItem('auditorias_teste');renderTeste()}">Limpar Todos os Testes</button></div>
   </div>
 </div>
 
 <div class="score-display" id="scoreDisplay">
-  <div class="score-display-label">Pontuação</div>
+  <div class="score-display-label">Pontua\u00e7\u00e3o</div>
   <div class="score-display-value" id="scoreValue">0%</div>
   <div class="score-display-class" id="scoreClass"></div>
 </div>
 
 <script>
+const sectionBackup = {};
+
 function doLogin() {
   const pass = document.getElementById('loginPass').value;
   if (pass === 'florio') {
@@ -470,11 +525,13 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   event.target.classList.add('active');
-  const formTabs = ['frota','documentacao','motoristas','emergencias'];
+  const formTabs = ['frota','documentacao','motoristas','emergencias','teste'];
   document.getElementById('scoreDisplay').style.display = formTabs.includes(tab) ? 'block' : 'none';
   if (formTabs.includes(tab)) updateScore();
   if (tab === 'salvas') renderSaved();
-  if (tab === 'dashboard') renderChart();
+  if (tab === 'dashboard') renderDashboard();
+  if (tab === 'planejamento') loadPlanejamento();
+  if (tab === 'teste') { renderTesteForm(); renderTeste(); }
 }
 
 const questions = {
@@ -537,20 +594,68 @@ function updateScore() {
   else { scoreEl.style.color = 'var(--critical)'; classEl.textContent = 'Cr\u00edtico'; classEl.style.color = 'var(--critical)'; }
 }
 
+// === CLEAR / RESTORE SECTIONS ===
+function clearSection(prefix, section) {
+  const container = document.getElementById(prefix + '-perguntas-' + section);
+  if (!container) return;
+  const opts = container.querySelectorAll('.form-q-opt.selected-c, .form-q-opt.selected-nc, .form-q-opt.selected-na');
+  const backup = [];
+  opts.forEach(o => {
+    const val = o.classList.contains('selected-c') ? 'c' : o.classList.contains('selected-nc') ? 'nc' : 'na';
+    backup.push({ id: o.dataset.id, val: val });
+    o.classList.remove('selected-c','selected-nc','selected-na');
+  });
+  if (backup.length > 0) {
+    sectionBackup[prefix + '-' + section] = backup;
+    const restoreBtn = document.getElementById('restore-' + prefix + '-' + section);
+    if (restoreBtn) restoreBtn.classList.add('visible');
+  }
+  updateScore();
+}
+
+function restoreSection(prefix, section) {
+  const key = prefix + '-' + section;
+  const backup = sectionBackup[key];
+  if (!backup) return;
+  backup.forEach(item => {
+    const btns = document.querySelectorAll('[data-id="' + item.id + '"]');
+    btns.forEach(b => {
+      b.classList.remove('selected-c','selected-nc','selected-na');
+      if (b.dataset.val === item.val) b.classList.add('selected-' + item.val);
+    });
+  });
+  delete sectionBackup[key];
+  const restoreBtn = document.getElementById('restore-' + prefix + '-' + section);
+  if (restoreBtn) restoreBtn.classList.remove('visible');
+  updateScore();
+}
+
+// === SAVE AUDIT (with full responses) ===
 function saveAudit(type) {
   const activeTab = document.querySelector('.tab-content.active');
   const inputs = activeTab.querySelectorAll('input, select');
   const opts = activeTab.querySelectorAll('.form-q-opt.selected-c, .form-q-opt.selected-nc, .form-q-opt.selected-na');
   if (opts.length === 0) { alert('Preencha pelo menos uma pergunta antes de salvar.'); return; }
-  let total = 0, conformes = 0;
+  let total = 0, conformes = 0, ncs = 0;
+  const responses = [];
   opts.forEach(o => {
-    if (o.classList.contains('selected-c')) { conformes++; total++; }
-    else if (o.classList.contains('selected-nc')) { total++; }
+    const val = o.classList.contains('selected-c') ? 'C' : o.classList.contains('selected-nc') ? 'NC' : 'NA';
+    if (val === 'C') { conformes++; total++; }
+    else if (val === 'NC') { ncs++; total++; }
+    responses.push({ id: o.dataset.id, val: val });
   });
   const score = total > 0 ? Math.round((conformes / total) * 100) : 0;
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
-  saved.unshift({ id: Date.now(), type: type, date: new Date().toLocaleDateString('pt-BR'), info: inputs[0]?.value || 'Sem identifica\u00e7\u00e3o', score: score, totalQ: opts.length, conformes: conformes });
+  saved.unshift({
+    id: Date.now(), type: type,
+    date: new Date().toLocaleDateString('pt-BR'),
+    info: inputs[0]?.value || 'Sem identifica\u00e7\u00e3o',
+    score: score, totalQ: opts.length, conformes: conformes, ncs: ncs,
+    responses: responses
+  });
   localStorage.setItem('auditorias', JSON.stringify(saved));
+  // Update planejamento
+  updatePlanFromSaved();
   alert('Auditoria salva!\n\nTipo: ' + type + '\nNota: ' + score + '%\nClassifica\u00e7\u00e3o: ' + getClass(score));
   clearForm(type === 'documentacao' ? 'doc' : type === 'motoristas' ? 'mot' : type === 'emergencias' ? 'emer' : 'frota');
 }
@@ -562,24 +667,196 @@ function getClass(score) {
   return 'Cr\u00edtico';
 }
 
+function getScoreColor(score) {
+  if (score > 95) return 'var(--excellent)';
+  if (score >= 80) return 'var(--good)';
+  if (score >= 60) return 'var(--regular)';
+  return 'var(--critical)';
+}
+
 function clearForm(prefix) {
   const activeTab = document.querySelector('.tab-content.active');
   activeTab.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
   activeTab.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+  // Hide all restore buttons
+  activeTab.querySelectorAll('.restore-btn').forEach(b => b.classList.remove('visible'));
   updateScore();
 }
 
+// === PLANEJAMENTO ===
+function updatePlanFromSaved() {
+  const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
+  const plan = { frota: [], documentacao: [], motoristas: [], emergencias: [] };
+  saved.forEach(s => { if (plan[s.type]) plan[s.type].push(s.score); });
+  localStorage.setItem('planejamento', JSON.stringify(plan));
+}
+
+function loadPlanejamento() {
+  const plan = JSON.parse(localStorage.getItem('planejamento') || 'null');
+  const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
+  const types = ['frota','documentacao','motoristas','emergencias'];
+  const prefixes = { frota: 'frota', documentacao: 'doc', motoristas: 'mot', emergencias: 'emer' };
+  const counts = { frota: 4, documentacao: 3, motoristas: 3, emergencias: 2 };
+  types.forEach(type => {
+    const typeAudits = saved.filter(s => s.type === type);
+    const prefix = prefixes[type];
+    for (let i = 1; i <= counts[type]; i++) {
+      const el = document.getElementById('plan-' + prefix + '-' + i);
+      if (!el) continue;
+      if (typeAudits.length >= i) {
+        const audit = typeAudits[i-1];
+        el.textContent = audit.score + '%';
+        el.className = 'plan-team-status ' + (audit.score >= 80 ? 'status-done' : 'status-pending');
+      } else {
+        el.textContent = 'Pendente';
+        el.className = 'plan-team-status status-pending';
+      }
+    }
+  });
+}
+
+function clearPlanejamento() {
+  if (!confirm('Limpar dados do planejamento?')) return;
+  localStorage.removeItem('planejamento');
+  const allStatus = document.querySelectorAll('#tab-planejamento .plan-team-status');
+  allStatus.forEach(el => { el.textContent = 'Pendente'; el.className = 'plan-team-status status-pending'; });
+}
+
+// === DASHBOARD (pulls from saved audits) ===
+function renderDashboard() {
+  const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
+  // Stats
+  const totalAudits = saved.length;
+  let totalScore = 0, totalNC = 0;
+  saved.forEach(s => { totalScore += s.score; totalNC += (s.ncs || 0); });
+  const media = totalAudits > 0 ? Math.round(totalScore / totalAudits) : 0;
+
+  document.getElementById('dash-media').textContent = totalAudits > 0 ? media + '%' : '--';
+  document.getElementById('dash-media').style.color = totalAudits > 0 ? getScoreColor(media) : 'var(--text)';
+  document.getElementById('dash-media-class').textContent = totalAudits > 0 ? 'Classifica\u00e7\u00e3o: ' + getClass(media) : 'Sem dados';
+  document.getElementById('dash-total').textContent = totalAudits;
+  document.getElementById('dash-nc').textContent = totalNC;
+
+  // Per-type averages
+  const types = ['frota','documentacao','motoristas','emergencias'];
+  const typeLabels = { frota:'Frota / Ve\u00edculos', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
+  const typeStats = {};
+  types.forEach(t => {
+    const items = saved.filter(s => s.type === t);
+    if (items.length > 0) {
+      const avg = Math.round(items.reduce((a,b) => a + b.score, 0) / items.length);
+      typeStats[t] = { avg: avg, last: items[0].score, count: items.length };
+    }
+  });
+
+  // Best area
+  const sorted = Object.entries(typeStats).sort((a,b) => b[1].avg - a[1].avg);
+  if (sorted.length > 0) {
+    document.getElementById('dash-melhor').textContent = typeLabels[sorted[0][0]];
+    document.getElementById('dash-melhor-sub').textContent = 'M\u00e9dia: ' + sorted[0][1].avg + '%';
+  } else {
+    document.getElementById('dash-melhor').textContent = '--';
+    document.getElementById('dash-melhor-sub').textContent = '';
+  }
+
+  // Ranking table
+  const tbody = document.getElementById('dashRanking');
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">Nenhuma auditoria realizada ainda.</td></tr>';
+  } else {
+    tbody.innerHTML = sorted.map((entry, idx) => {
+      const [type, stats] = entry;
+      const scoreClass = stats.avg > 95 ? 'score-excellent' : stats.avg >= 80 ? 'score-good' : stats.avg >= 60 ? 'score-regular' : 'score-critical';
+      return '<tr><td><strong>' + (idx+1) + '\u00ba</strong></td><td>' + typeLabels[type] + '</td><td>' + stats.last + '%</td><td>' + stats.avg + '%</td><td><span class="score-badge ' + scoreClass + '">' + getClass(stats.avg) + '</span></td></tr>';
+    }).join('');
+  }
+
+  // Chart
+  renderChart(saved);
+}
+
+function renderChart(saved) {
+  const ctx = document.getElementById('evolutionChart');
+  if (!ctx) return;
+  if (window.chartInstance) window.chartInstance.destroy();
+  if (!saved || saved.length === 0) {
+    window.chartInstance = new Chart(ctx, {
+      type: 'line', data: { labels: ['Sem dados'], datasets: [{ label: 'Aguardando', data: [0], borderColor: '#ccc' }] },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+    return;
+  }
+  const types = ['frota','documentacao','motoristas','emergencias'];
+  const colors = { frota: 'oklch(45% 0.14 175)', documentacao: 'oklch(50% 0.12 250)', motoristas: 'oklch(60% 0.15 55)', emergencias: 'oklch(50% 0.14 25)' };
+  const labels = { frota:'Frota', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
+  const datasets = [];
+  types.forEach(type => {
+    const items = saved.filter(s => s.type === type).reverse();
+    if (items.length > 0) {
+      datasets.push({ label: labels[type], data: items.map(i => i.score), borderColor: colors[type], tension: 0.3, borderWidth: 2.5 });
+    }
+  });
+  const maxLen = Math.max(...datasets.map(d => d.data.length), 1);
+  const chartLabels = Array.from({length: maxLen}, (_, i) => '#' + (i+1));
+  window.chartInstance = new Chart(ctx, {
+    type: 'line', data: { labels: chartLabels, datasets: datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'Inter', size: 12 } } } },
+      scales: {
+        y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }, grid: { color: 'oklch(90% 0.005 220)' } },
+        x: { ticks: { font: { family: 'Inter', size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// === SAVED AUDITS (with expand) ===
 function renderSaved(filter) {
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
   const list = document.getElementById('savedList');
   const filtered = filter && filter !== 'all' ? saved.filter(s => s.type === filter) : saved;
   if (filtered.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px;">Nenhuma auditoria salva ainda.</p>'; return; }
-  list.innerHTML = filtered.map(s => {
+  list.innerHTML = filtered.map((s, idx) => {
     const typeLabels = { frota:'Frota', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
     const typeClasses = { frota:'type-frota', documentacao:'type-doc', motoristas:'type-motorista', emergencias:'type-emergencia' };
     const scoreClass = s.score > 95 ? 'score-excellent' : s.score >= 80 ? 'score-good' : s.score >= 60 ? 'score-regular' : 'score-critical';
-    return '<div class="saved-item"><div class="saved-item-info"><span class="saved-item-type ' + typeClasses[s.type] + '">' + typeLabels[s.type] + '</span><div class="saved-item-details"><strong>' + s.info + '</strong><span>' + s.date + ' \u00b7 ' + s.totalQ + ' perguntas respondidas</span></div></div><span class="score-badge ' + scoreClass + '">' + s.score + '% \u00b7 ' + getClass(s.score) + '</span></div>';
+    let expandHTML = '';
+    if (s.responses && s.responses.length > 0) {
+      const prefix = s.type === 'documentacao' ? 'doc' : s.type === 'motoristas' ? 'mot' : s.type === 'emergencias' ? 'emer' : 'frota';
+      const qs = questions[prefix];
+      expandHTML = '<div class="saved-item-expand" id="expand-' + s.id + '">';
+      Object.keys(qs).forEach(sec => {
+        expandHTML += '<div style="margin-bottom:8px;"><strong style="font-size:11px;color:var(--text-muted);text-transform:uppercase;">' + getSectionTitle(prefix, sec) + '</strong>';
+        qs[sec].forEach((q, qi) => {
+          const respKey = prefix + '-' + sec + '-' + qi;
+          const resp = s.responses.find(r => r.id === respKey);
+          if (resp) {
+            const badgeClass = resp.val === 'C' ? 'saved-q-c' : resp.val === 'NC' ? 'saved-q-nc' : 'saved-q-na';
+            expandHTML += '<div class="saved-q-item"><span class="saved-q-badge ' + badgeClass + '">' + resp.val + '</span><span>' + q + '</span></div>';
+          }
+        });
+        expandHTML += '</div>';
+      });
+      expandHTML += '</div>';
+    }
+    return '<div class="saved-item" onclick="toggleExpand(' + s.id + ')"><div class="saved-item-header"><div class="saved-item-info"><span class="saved-item-type ' + typeClasses[s.type] + '">' + typeLabels[s.type] + '</span><div class="saved-item-details"><strong>' + s.info + '</strong><span>' + s.date + ' \u00b7 ' + s.totalQ + ' perguntas respondidas</span></div></div><span class="score-badge ' + scoreClass + '">' + s.score + '% \u00b7 ' + getClass(s.score) + '</span></div>' + expandHTML + '</div>';
   }).join('');
+}
+
+function getSectionTitle(prefix, sec) {
+  const titles = {
+    frota: { 1: 'Condi\u00e7\u00f5es Gerais', 2: 'Freios e Suspens\u00e3o', 3: 'Ilumina\u00e7\u00e3o', 4: 'Compartimento de Carga' },
+    doc: { 1: 'Doc. Ve\u00edculo', 2: 'Doc. Motorista', 3: 'Licen\u00e7as Empresa' },
+    mot: { 1: 'Capacita\u00e7\u00e3o', 2: 'EPIs', 3: 'Comportamento' },
+    emer: { 1: 'Extintores', 2: 'Kit NBR 9735', 3: 'Sinaliza\u00e7\u00e3o' }
+  };
+  return titles[prefix]?.[sec] || 'Se\u00e7\u00e3o ' + sec;
+}
+
+function toggleExpand(id) {
+  const el = document.getElementById('expand-' + id);
+  if (el) el.classList.toggle('open');
 }
 
 function filterSaved(filter) {
@@ -588,37 +865,77 @@ function filterSaved(filter) {
   renderSaved(filter);
 }
 
-function renderChart() {
-  const ctx = document.getElementById('evolutionChart');
-  if (!ctx) return;
-  if (window.chartInstance) window.chartInstance.destroy();
-  window.chartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago'],
-      datasets: [
-        { label: 'Frota', data: [72, 78, 80, 83, 85, 87], borderColor: 'oklch(45% 0.14 175)', tension: 0.3, borderWidth: 2.5 },
-        { label: 'Documenta\u00e7\u00e3o', data: [88, 90, 92, 94, 95, 97], borderColor: 'oklch(50% 0.12 250)', tension: 0.3, borderWidth: 2.5 },
-        { label: 'Motoristas', data: [60, 65, 68, 72, 74, 78], borderColor: 'oklch(60% 0.15 55)', tension: 0.3, borderWidth: 2.5 },
-        { label: 'Emerg\u00eancias', data: [80, 82, 85, 88, 89, 91], borderColor: 'oklch(50% 0.14 25)', tension: 0.3, borderWidth: 2.5 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'Inter', size: 12 } } } },
-      scales: {
-        y: { min: 50, max: 100, ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }, grid: { color: 'oklch(90% 0.005 220)' } },
-        x: { ticks: { font: { family: 'Inter', size: 11 } }, grid: { display: false } }
-      }
-    }
+// === TEST TAB ===
+function renderTesteForm() {
+  const tipo = document.getElementById('teste-tipo').value;
+  const prefix = tipo === 'documentacao' ? 'doc' : tipo === 'motoristas' ? 'mot' : tipo === 'emergencias' ? 'emer' : 'frota';
+  const qs = questions[prefix];
+  const area = document.getElementById('teste-form-area');
+  let html = '';
+  Object.keys(qs).forEach(sec => {
+    html += '<div class="form-section"><div class="form-section-title"><span>' + getSectionTitle(prefix, sec) + '</span></div><div id="teste-perguntas-' + sec + '">';
+    qs[sec].forEach((q, i) => {
+      const id = 'teste-' + sec + '-' + i;
+      html += '<div class="form-question"><span class="form-q-number">' + (i+1) + '</span><span class="form-q-text">' + q + '</span><div class="form-q-options"><button class="form-q-opt" data-id="' + id + '" data-val="c" onclick="selectOpt(this,\'c\')">C</button><button class="form-q-opt" data-id="' + id + '" data-val="nc" onclick="selectOpt(this,\'nc\')">NC</button><button class="form-q-opt" data-id="' + id + '" data-val="na" onclick="selectOpt(this,\'na\')">NA</button></div></div>';
+    });
+    html += '</div></div>';
   });
+  area.innerHTML = html;
+}
+
+function clearTeste() {
+  const area = document.getElementById('teste-form-area');
+  area.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
+  document.getElementById('teste-id').value = '';
+  updateScore();
+}
+
+function saveTeste() {
+  const area = document.getElementById('teste-form-area');
+  const opts = area.querySelectorAll('.form-q-opt.selected-c, .form-q-opt.selected-nc, .form-q-opt.selected-na');
+  if (opts.length === 0) { alert('Preencha pelo menos uma pergunta.'); return; }
+  let total = 0, conformes = 0;
+  const responses = [];
+  opts.forEach(o => {
+    const val = o.classList.contains('selected-c') ? 'C' : o.classList.contains('selected-nc') ? 'NC' : 'NA';
+    if (val === 'C') { conformes++; total++; }
+    else if (val === 'NC') { total++; }
+    responses.push({ id: o.dataset.id, val: val });
+  });
+  const score = total > 0 ? Math.round((conformes / total) * 100) : 0;
+  const tipo = document.getElementById('teste-tipo').value;
+  const saved = JSON.parse(localStorage.getItem('auditorias_teste') || '[]');
+  saved.unshift({ id: Date.now(), type: tipo, date: new Date().toLocaleDateString('pt-BR'), info: document.getElementById('teste-id').value || 'Teste', score: score, totalQ: opts.length, responses: responses });
+  localStorage.setItem('auditorias_teste', JSON.stringify(saved));
+  alert('Teste salvo! Nota: ' + score + '% (' + getClass(score) + ')\n\nDados n\u00e3o afetam o sistema oficial.');
+  clearTeste();
+  renderTeste();
+}
+
+function renderTeste() {
+  const saved = JSON.parse(localStorage.getItem('auditorias_teste') || '[]');
+  const list = document.getElementById('testeList');
+  if (saved.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhum teste salvo.</p>'; return; }
+  const typeLabels = { frota:'Frota', documentacao:'Doc', motoristas:'Motoristas', emergencias:'Emerg.' };
+  list.innerHTML = saved.map(s => {
+    const scoreClass = s.score > 95 ? 'score-excellent' : s.score >= 80 ? 'score-good' : s.score >= 60 ? 'score-regular' : 'score-critical';
+    return '<div class="saved-item" style="cursor:default;"><div class="saved-item-header"><div class="saved-item-info"><span class="saved-item-type type-frota">' + (typeLabels[s.type]||s.type) + '</span><div class="saved-item-details"><strong>' + s.info + '</strong><span>' + s.date + ' \u00b7 TESTE</span></div></div><span class="score-badge ' + scoreClass + '">' + s.score + '%</span></div></div>';
+  }).join('');
 }
 
 function initApp() {
+  // Set today's date
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(i => i.value = today);
+  // Render questions
   Object.keys(questions.frota).forEach(s => renderQuestions('frota', s, questions.frota[s]));
   Object.keys(questions.doc).forEach(s => renderQuestions('doc', s, questions.doc[s]));
   Object.keys(questions.mot).forEach(s => renderQuestions('mot', s, questions.mot[s]));
   Object.keys(questions.emer).forEach(s => renderQuestions('emer', s, questions.emer[s]));
+  // Load planejamento
+  loadPlanejamento();
+  // Teste type change
+  document.getElementById('teste-tipo').addEventListener('change', renderTesteForm);
 }
 </script>
 </body>
