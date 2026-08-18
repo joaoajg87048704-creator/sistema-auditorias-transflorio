@@ -25,6 +25,9 @@
   --good: oklch(50% 0.12 250);
   --regular: oklch(60% 0.15 80);
   --critical: oklch(50% 0.16 25);
+  --grave: oklch(45% 0.16 25);
+  --media-sev: oklch(55% 0.15 55);
+  --leve: oklch(50% 0.12 250);
   --radius: 10px;
   --radius-lg: 14px;
   --shadow-sm: 0 1px 3px oklch(20% 0.01 220 / 0.06);
@@ -114,6 +117,8 @@ body {
 .tab-btn.active { background: var(--primary); color: white; font-weight: 600; }
 .tab-btn.test-tab { background: oklch(90% 0.06 55); color: oklch(40% 0.14 55); font-weight: 600; }
 .tab-btn.test-tab.active { background: oklch(60% 0.15 55); color: white; }
+.tab-btn.nc-tab { background: oklch(92% 0.04 25); color: var(--critical); font-weight: 600; }
+.tab-btn.nc-tab.active { background: var(--critical); color: white; }
 
 .tab-content { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
 .tab-content.active { display: block; }
@@ -189,12 +194,12 @@ body {
 }
 .form-header-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .form-field label { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 4px; }
-.form-field select, .form-field input {
+.form-field select, .form-field input, .form-field textarea {
   width: 100%; padding: 8px 12px;
   border: 1px solid var(--border); border-radius: 8px;
   font-size: 13px; font-family: inherit; background: var(--bg);
 }
-.form-field select:focus, .form-field input:focus { outline: none; border-color: var(--primary); }
+.form-field select:focus, .form-field input:focus, .form-field textarea:focus { outline: none; border-color: var(--primary); }
 
 .form-section {
   background: var(--surface); border: 1px solid var(--border);
@@ -216,10 +221,12 @@ body {
 .section-btn.delete-btn:hover { background: oklch(95% 0.03 25); }
 
 .form-question {
-  display: flex; align-items: flex-start; gap: 12px;
   padding: 10px 0; border-bottom: 1px solid oklch(92% 0.005 220);
 }
 .form-question:last-child { border-bottom: none; }
+.form-q-row {
+  display: flex; align-items: flex-start; gap: 12px;
+}
 .form-q-number { font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 24px; padding-top: 2px; }
 .form-q-text { flex: 1; font-size: 13px; }
 
@@ -234,6 +241,19 @@ body {
 .form-q-opt.selected-c { background: var(--excellent); border-color: var(--excellent); color: white; }
 .form-q-opt.selected-nc { background: var(--critical); border-color: var(--critical); color: white; }
 .form-q-opt.selected-na { background: var(--text-muted); border-color: var(--text-muted); color: white; }
+
+.nc-motivo {
+  display: none; margin-top: 8px; margin-left: 36px;
+}
+.nc-motivo.visible { display: block; }
+.nc-motivo input {
+  width: 100%; padding: 8px 12px;
+  border: 1.5px solid oklch(85% 0.06 25); border-radius: 8px;
+  font-size: 12px; font-family: inherit; background: oklch(98% 0.01 25);
+  color: var(--text);
+}
+.nc-motivo input:focus { outline: none; border-color: var(--critical); }
+.nc-motivo input::placeholder { color: oklch(65% 0.05 25); }
 
 .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
 .btn {
@@ -311,6 +331,45 @@ body {
 .test-banner-text { font-size: 13px; font-weight: 600; color: oklch(35% 0.12 55); }
 .test-banner-sub { font-size: 11px; color: oklch(50% 0.1 55); }
 
+/* NC Tratativa */
+.nc-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 12px;
+  border-left: 4px solid var(--critical);
+}
+.nc-card.gravidade-leve { border-left-color: var(--leve); }
+.nc-card.gravidade-media { border-left-color: var(--media-sev); }
+.nc-card.gravidade-grave { border-left-color: var(--grave); }
+.nc-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+.nc-card-title { font-size: 13px; font-weight: 600; }
+.nc-card-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.nc-card-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
+.badge-leve { background: oklch(92% 0.04 250); color: var(--leve); }
+.badge-media { background: oklch(92% 0.05 55); color: var(--media-sev); }
+.badge-grave { background: oklch(92% 0.04 25); color: var(--grave); }
+.nc-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.nc-card-field label { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px; }
+.nc-card-field select, .nc-card-field input, .nc-card-field textarea {
+  width: 100%; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 12px; font-family: inherit; background: var(--bg);
+}
+.nc-card-field textarea { resize: vertical; min-height: 60px; }
+.nc-card-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+.nc-save-btn {
+  padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  font-family: inherit; border: none; cursor: pointer;
+  background: var(--primary); color: white;
+}
+.nc-save-btn:hover { background: var(--primary-hover); }
+
+.nc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+.nc-stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; text-align: center;
+}
+.nc-stat-num { font-size: 28px; font-weight: 800; }
+.nc-stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
 @media (max-width: 768px) {
   .form-header-grid { grid-template-columns: 1fr; }
   .tabs { padding: 8px 12px; }
@@ -318,6 +377,8 @@ body {
   .dash-grid { grid-template-columns: 1fr 1fr; }
   .topbar { padding: 0 16px; }
   .topbar-company { display: none; }
+  .nc-card-body { grid-template-columns: 1fr; }
+  .nc-stats { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
   .dash-grid { grid-template-columns: 1fr; }
@@ -353,6 +414,7 @@ body {
     <button class="tab-btn" onclick="switchTab('documentacao')">Documentação</button>
     <button class="tab-btn" onclick="switchTab('motoristas')">Motoristas</button>
     <button class="tab-btn" onclick="switchTab('emergencias')">Emergências</button>
+    <button class="tab-btn nc-tab" onclick="switchTab('tratativa')">Tratativa NC</button>
     <button class="tab-btn" onclick="switchTab('salvas')">Auditorias Salvas</button>
     <button class="tab-btn test-tab" onclick="switchTab('teste')">&#9888; Teste</button>
   </div>
@@ -464,6 +526,22 @@ body {
     <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('emer')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('emergencias')">Salvar Auditoria</button></div>
   </div>
 
+  <div class="tab-content" id="tab-tratativa">
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Tratativa de Não Conformidades</h2>
+    <div class="nc-stats">
+      <div class="nc-stat-card"><div class="nc-stat-num" id="nc-stat-leve" style="color:var(--leve)">0</div><div class="nc-stat-label">Leve</div></div>
+      <div class="nc-stat-card"><div class="nc-stat-num" id="nc-stat-media" style="color:var(--media-sev)">0</div><div class="nc-stat-label">Média</div></div>
+      <div class="nc-stat-card"><div class="nc-stat-num" id="nc-stat-grave" style="color:var(--grave)">0</div><div class="nc-stat-label">Grave</div></div>
+    </div>
+    <div class="saved-filters">
+      <button class="filter-btn active" onclick="filterNC('all')">Todas</button>
+      <button class="filter-btn" onclick="filterNC('pendente')">Pendentes</button>
+      <button class="filter-btn" onclick="filterNC('em_tratativa')">Em Tratativa</button>
+      <button class="filter-btn" onclick="filterNC('concluida')">Concluídas</button>
+    </div>
+    <div id="ncList"></div>
+  </div>
+
   <div class="tab-content" id="tab-salvas">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditorias Salvas</h2>
     <div class="saved-filters">
@@ -532,6 +610,7 @@ function switchTab(tab) {
   if (tab === 'dashboard') renderDashboard();
   if (tab === 'planejamento') loadPlanejamento();
   if (tab === 'teste') { renderTesteForm(); renderTeste(); }
+  if (tab === 'tratativa') renderTratativa();
 }
 
 const questions = {
@@ -564,7 +643,7 @@ function renderQuestions(prefix, section, items) {
   let html = '';
   items.forEach((q, i) => {
     const id = prefix + '-' + section + '-' + i;
-    html += '<div class="form-question"><span class="form-q-number">' + (i+1) + '</span><span class="form-q-text">' + q + '</span><div class="form-q-options"><button class="form-q-opt" data-id="' + id + '" data-val="c" onclick="selectOpt(this,\'c\')">C</button><button class="form-q-opt" data-id="' + id + '" data-val="nc" onclick="selectOpt(this,\'nc\')">NC</button><button class="form-q-opt" data-id="' + id + '" data-val="na" onclick="selectOpt(this,\'na\')">NA</button></div></div>';
+    html += '<div class="form-question"><div class="form-q-row"><span class="form-q-number">' + (i+1) + '</span><span class="form-q-text">' + q + '</span><div class="form-q-options"><button class="form-q-opt" data-id="' + id + '" data-val="c" onclick="selectOpt(this,\'c\')">C</button><button class="form-q-opt" data-id="' + id + '" data-val="nc" onclick="selectOpt(this,\'nc\')">NC</button><button class="form-q-opt" data-id="' + id + '" data-val="na" onclick="selectOpt(this,\'na\')">NA</button></div></div><div class="nc-motivo" id="motivo-' + id + '"><input type="text" placeholder="Motivo da n\u00e3o conformidade..." data-motivo-id="' + id + '"></div></div>';
   });
   container.innerHTML = html;
 }
@@ -572,6 +651,17 @@ function renderQuestions(prefix, section, items) {
 function selectOpt(btn, val) {
   btn.parentElement.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
   btn.classList.add('selected-' + val);
+  // Show/hide motivo field
+  const id = btn.dataset.id;
+  const motivoDiv = document.getElementById('motivo-' + id);
+  if (motivoDiv) {
+    if (val === 'nc') {
+      motivoDiv.classList.add('visible');
+    } else {
+      motivoDiv.classList.remove('visible');
+      motivoDiv.querySelector('input').value = '';
+    }
+  }
   updateScore();
 }
 
@@ -604,6 +694,7 @@ function clearSection(prefix, section) {
     backup.push({ id: o.dataset.id, val: val });
     o.classList.remove('selected-c','selected-nc','selected-na');
   });
+  container.querySelectorAll('.nc-motivo').forEach(m => m.classList.remove('visible'));
   if (backup.length > 0) {
     sectionBackup[prefix + '-' + section] = backup;
     const restoreBtn = document.getElementById('restore-' + prefix + '-' + section);
@@ -620,7 +711,13 @@ function restoreSection(prefix, section) {
     const btns = document.querySelectorAll('[data-id="' + item.id + '"]');
     btns.forEach(b => {
       b.classList.remove('selected-c','selected-nc','selected-na');
-      if (b.dataset.val === item.val) b.classList.add('selected-' + item.val);
+      if (b.dataset.val === item.val) {
+        b.classList.add('selected-' + item.val);
+        if (item.val === 'nc') {
+          const motivoDiv = document.getElementById('motivo-' + item.id);
+          if (motivoDiv) motivoDiv.classList.add('visible');
+        }
+      }
     });
   });
   delete sectionBackup[key];
@@ -631,29 +728,65 @@ function restoreSection(prefix, section) {
 
 function saveAudit(type) {
   const activeTab = document.querySelector('.tab-content.active');
-  const inputs = activeTab.querySelectorAll('input, select');
+  const inputs = activeTab.querySelectorAll('.form-header input, .form-header select');
   const opts = activeTab.querySelectorAll('.form-q-opt.selected-c, .form-q-opt.selected-nc, .form-q-opt.selected-na');
   if (opts.length === 0) { alert('Preencha pelo menos uma pergunta antes de salvar.'); return; }
   let total = 0, conformes = 0, ncs = 0;
   const responses = [];
+  const ncItems = [];
   opts.forEach(o => {
     const val = o.classList.contains('selected-c') ? 'C' : o.classList.contains('selected-nc') ? 'NC' : 'NA';
     if (val === 'C') { conformes++; total++; }
     else if (val === 'NC') { ncs++; total++; }
-    responses.push({ id: o.dataset.id, val: val });
+    const id = o.dataset.id;
+    let motivo = '';
+    if (val === 'NC') {
+      const motivoInput = activeTab.querySelector('[data-motivo-id="' + id + '"]');
+      motivo = motivoInput ? motivoInput.value.trim() : '';
+    }
+    responses.push({ id: id, val: val, motivo: motivo });
+    if (val === 'NC') {
+      ncItems.push({ id: id, motivo: motivo });
+    }
   });
   const score = total > 0 ? Math.round((conformes / total) * 100) : 0;
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
+  const auditId = Date.now();
   saved.unshift({
-    id: Date.now(), type: type,
+    id: auditId, type: type,
     date: new Date().toLocaleDateString('pt-BR'),
     info: inputs[0]?.value || 'Sem identifica\u00e7\u00e3o',
     score: score, totalQ: opts.length, conformes: conformes, ncs: ncs,
     responses: responses
   });
   localStorage.setItem('auditorias', JSON.stringify(saved));
+  // Save NCs to tratativa
+  if (ncItems.length > 0) {
+    const prefix = type === 'documentacao' ? 'doc' : type === 'motoristas' ? 'mot' : type === 'emergencias' ? 'emer' : 'frota';
+    const tratativas = JSON.parse(localStorage.getItem('tratativas_nc') || '[]');
+    ncItems.forEach(nc => {
+      const parts = nc.id.split('-');
+      const sec = parts[1];
+      const qi = parseInt(parts[2]);
+      const qText = questions[prefix]?.[sec]?.[qi] || 'Pergunta n\u00e3o identificada';
+      tratativas.unshift({
+        ncId: Date.now() + Math.random(),
+        auditId: auditId,
+        type: type,
+        date: new Date().toLocaleDateString('pt-BR'),
+        info: inputs[0]?.value || 'Sem identifica\u00e7\u00e3o',
+        pergunta: qText,
+        motivo: nc.motivo,
+        gravidade: '',
+        tratamento: '',
+        dataFinal: '',
+        status: 'pendente'
+      });
+    });
+    localStorage.setItem('tratativas_nc', JSON.stringify(tratativas));
+  }
   updatePlanFromSaved();
-  alert('Auditoria salva!\n\nTipo: ' + type + '\nNota: ' + score + '%\nClassifica\u00e7\u00e3o: ' + getClass(score));
+  alert('Auditoria salva!\n\nTipo: ' + type + '\nNota: ' + score + '%\nClassifica\u00e7\u00e3o: ' + getClass(score) + (ncs > 0 ? '\n\n' + ncs + ' NC(s) encaminhada(s) para Tratativa.' : ''));
   clearForm(type === 'documentacao' ? 'doc' : type === 'motoristas' ? 'mot' : type === 'emergencias' ? 'emer' : 'frota');
 }
 
@@ -675,6 +808,7 @@ function clearForm(prefix) {
   const activeTab = document.querySelector('.tab-content.active');
   activeTab.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
   activeTab.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+  activeTab.querySelectorAll('.nc-motivo').forEach(m => { m.classList.remove('visible'); m.querySelector('input').value = ''; });
   activeTab.querySelectorAll('.restore-btn').forEach(b => b.classList.remove('visible'));
   updateScore();
 }
@@ -722,13 +856,11 @@ function renderDashboard() {
   let totalScore = 0, totalNC = 0;
   saved.forEach(s => { totalScore += s.score; totalNC += (s.ncs || 0); });
   const media = totalAudits > 0 ? Math.round(totalScore / totalAudits) : 0;
-
   document.getElementById('dash-media').textContent = totalAudits > 0 ? media + '%' : '--';
   document.getElementById('dash-media').style.color = totalAudits > 0 ? getScoreColor(media) : 'var(--text)';
   document.getElementById('dash-media-class').textContent = totalAudits > 0 ? 'Classifica\u00e7\u00e3o: ' + getClass(media) : 'Sem dados';
   document.getElementById('dash-total').textContent = totalAudits;
   document.getElementById('dash-nc').textContent = totalNC;
-
   const types = ['frota','documentacao','motoristas','emergencias'];
   const typeLabels = { frota:'Frota / Ve\u00edculos', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
   const typeStats = {};
@@ -739,7 +871,6 @@ function renderDashboard() {
       typeStats[t] = { avg: avg, last: items[0].score, count: items.length };
     }
   });
-
   const sorted = Object.entries(typeStats).sort((a,b) => b[1].avg - a[1].avg);
   if (sorted.length > 0) {
     document.getElementById('dash-melhor').textContent = typeLabels[sorted[0][0]];
@@ -748,7 +879,6 @@ function renderDashboard() {
     document.getElementById('dash-melhor').textContent = '--';
     document.getElementById('dash-melhor-sub').textContent = '';
   }
-
   const tbody = document.getElementById('dashRanking');
   if (sorted.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">Nenhuma auditoria realizada ainda.</td></tr>';
@@ -759,7 +889,6 @@ function renderDashboard() {
       return '<tr><td><strong>' + (idx+1) + '\u00ba</strong></td><td>' + typeLabels[type] + '</td><td>' + stats.last + '%</td><td>' + stats.avg + '%</td><td><span class="score-badge ' + scoreClass + '">' + getClass(stats.avg) + '</span></td></tr>';
     }).join('');
   }
-
   renderChart(saved);
 }
 
@@ -768,10 +897,7 @@ function renderChart(saved) {
   if (!ctx) return;
   if (window.chartInstance) window.chartInstance.destroy();
   if (!saved || saved.length === 0) {
-    window.chartInstance = new Chart(ctx, {
-      type: 'line', data: { labels: ['Sem dados'], datasets: [{ label: 'Aguardando', data: [0], borderColor: '#ccc' }] },
-      options: { responsive: true, maintainAspectRatio: false }
-    });
+    window.chartInstance = new Chart(ctx, { type: 'line', data: { labels: ['Sem dados'], datasets: [{ label: 'Aguardando', data: [0], borderColor: '#ccc' }] }, options: { responsive: true, maintainAspectRatio: false } });
     return;
   }
   const types = ['frota','documentacao','motoristas','emergencias'];
@@ -780,31 +906,74 @@ function renderChart(saved) {
   const datasets = [];
   types.forEach(type => {
     const items = saved.filter(s => s.type === type).reverse();
-    if (items.length > 0) {
-      datasets.push({ label: labels[type], data: items.map(i => i.score), borderColor: colors[type], tension: 0.3, borderWidth: 2.5 });
-    }
+    if (items.length > 0) datasets.push({ label: labels[type], data: items.map(i => i.score), borderColor: colors[type], tension: 0.3, borderWidth: 2.5 });
   });
   const maxLen = Math.max(...datasets.map(d => d.data.length), 1);
   const chartLabels = Array.from({length: maxLen}, (_, i) => '#' + (i+1));
   window.chartInstance = new Chart(ctx, {
     type: 'line', data: { labels: chartLabels, datasets: datasets },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'Inter', size: 12 } } } },
-      scales: {
-        y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }, grid: { color: 'oklch(90% 0.005 220)' } },
-        x: { ticks: { font: { family: 'Inter', size: 11 } }, grid: { display: false } }
-      }
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20, font: { family: 'Inter', size: 12 } } } }, scales: { y: { min: 0, max: 100, ticks: { callback: v => v + '%', font: { family: 'Inter', size: 11 } }, grid: { color: 'oklch(90% 0.005 220)' } }, x: { ticks: { font: { family: 'Inter', size: 11 } }, grid: { display: false } } } }
   });
 }
 
+// === TRATATIVA NC ===
+function renderTratativa(filter) {
+  const tratativas = JSON.parse(localStorage.getItem('tratativas_nc') || '[]');
+  let filtered = tratativas;
+  if (filter && filter !== 'all') filtered = tratativas.filter(t => t.status === filter);
+
+  // Stats
+  const leves = tratativas.filter(t => t.gravidade === 'leve').length;
+  const medias = tratativas.filter(t => t.gravidade === 'media').length;
+  const graves = tratativas.filter(t => t.gravidade === 'grave').length;
+  document.getElementById('nc-stat-leve').textContent = leves;
+  document.getElementById('nc-stat-media').textContent = medias;
+  document.getElementById('nc-stat-grave').textContent = graves;
+
+  const list = document.getElementById('ncList');
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px;">Nenhuma n\u00e3o conformidade registrada.</p>';
+    return;
+  }
+  const typeLabels = { frota:'Frota', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
+  list.innerHTML = filtered.map((nc, idx) => {
+    const gravClass = nc.gravidade ? 'gravidade-' + nc.gravidade : '';
+    const badgeClass = nc.gravidade === 'leve' ? 'badge-leve' : nc.gravidade === 'media' ? 'badge-media' : nc.gravidade === 'grave' ? 'badge-grave' : '';
+    const statusLabel = nc.status === 'concluida' ? 'Conclu\u00edda' : nc.status === 'em_tratativa' ? 'Em Tratativa' : 'Pendente';
+    return '<div class="nc-card ' + gravClass + '">' +
+      '<div class="nc-card-header"><div><div class="nc-card-title">' + nc.pergunta + '</div><div class="nc-card-meta">' + (typeLabels[nc.type]||nc.type) + ' | ' + nc.info + ' | ' + nc.date + '</div>' + (nc.motivo ? '<div class="nc-card-meta" style="margin-top:4px;"><strong>Motivo:</strong> ' + nc.motivo + '</div>' : '') + '</div>' + (nc.gravidade ? '<span class="nc-card-badge ' + badgeClass + '">' + nc.gravidade + '</span>' : '<span class="nc-card-badge" style="background:var(--surface-alt);color:var(--text-muted);">Sem classifica\u00e7\u00e3o</span>') + '</div>' +
+      '<div class="nc-card-body">' +
+        '<div class="nc-card-field"><label>Gravidade</label><select onchange="updateNC(' + idx + ',\'gravidade\',this.value)"><option value=""' + (!nc.gravidade ? ' selected' : '') + '>Selecionar...</option><option value="leve"' + (nc.gravidade==='leve' ? ' selected' : '') + '>Leve</option><option value="media"' + (nc.gravidade==='media' ? ' selected' : '') + '>M\u00e9dia</option><option value="grave"' + (nc.gravidade==='grave' ? ' selected' : '') + '>Grave</option></select></div>' +
+        '<div class="nc-card-field"><label>Status</label><select onchange="updateNC(' + idx + ',\'status\',this.value)"><option value="pendente"' + (nc.status==='pendente' ? ' selected' : '') + '>Pendente</option><option value="em_tratativa"' + (nc.status==='em_tratativa' ? ' selected' : '') + '>Em Tratativa</option><option value="concluida"' + (nc.status==='concluida' ? ' selected' : '') + '>Conclu\u00edda</option></select></div>' +
+        '<div class="nc-card-field"><label>Data Final Tratativa</label><input type="date" value="' + (nc.dataFinal||'') + '" onchange="updateNC(' + idx + ',\'dataFinal\',this.value)"></div>' +
+        '<div class="nc-card-field"><label>Como ser\u00e1 tratada</label><textarea placeholder="Descreva a a\u00e7\u00e3o corretiva..." onchange="updateNC(' + idx + ',\'tratamento\',this.value)">' + (nc.tratamento||'') + '</textarea></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function updateNC(idx, field, value) {
+  const tratativas = JSON.parse(localStorage.getItem('tratativas_nc') || '[]');
+  if (tratativas[idx]) {
+    tratativas[idx][field] = value;
+    localStorage.setItem('tratativas_nc', JSON.stringify(tratativas));
+    renderTratativa();
+  }
+}
+
+function filterNC(filter) {
+  document.querySelectorAll('#tab-tratativa .filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderTratativa(filter);
+}
+
+// === SAVED ===
 function renderSaved(filter) {
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
   const list = document.getElementById('savedList');
   const filtered = filter && filter !== 'all' ? saved.filter(s => s.type === filter) : saved;
   if (filtered.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px;">Nenhuma auditoria salva ainda.</p>'; return; }
-  list.innerHTML = filtered.map((s, idx) => {
+  list.innerHTML = filtered.map((s) => {
     const typeLabels = { frota:'Frota', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
     const typeClasses = { frota:'type-frota', documentacao:'type-doc', motoristas:'type-motorista', emergencias:'type-emergencia' };
     const scoreClass = s.score > 95 ? 'score-excellent' : s.score >= 80 ? 'score-good' : s.score >= 60 ? 'score-regular' : 'score-critical';
@@ -820,7 +989,8 @@ function renderSaved(filter) {
           const resp = s.responses.find(r => r.id === respKey);
           if (resp) {
             const badgeClass = resp.val === 'C' ? 'saved-q-c' : resp.val === 'NC' ? 'saved-q-nc' : 'saved-q-na';
-            expandHTML += '<div class="saved-q-item"><span class="saved-q-badge ' + badgeClass + '">' + resp.val + '</span><span>' + q + '</span></div>';
+            let motivoText = (resp.val === 'NC' && resp.motivo) ? ' <span style="color:var(--critical);font-style:italic;">(' + resp.motivo + ')</span>' : '';
+            expandHTML += '<div class="saved-q-item"><span class="saved-q-badge ' + badgeClass + '">' + resp.val + '</span><span>' + q + motivoText + '</span></div>';
           }
         });
         expandHTML += '</div>';
@@ -847,11 +1017,12 @@ function toggleExpand(id) {
 }
 
 function filterSaved(filter) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#tab-salvas .filter-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   renderSaved(filter);
 }
 
+// === TEST ===
 function renderTesteForm() {
   const tipo = document.getElementById('teste-tipo').value;
   const prefix = tipo === 'documentacao' ? 'doc' : tipo === 'motoristas' ? 'mot' : tipo === 'emergencias' ? 'emer' : 'frota';
@@ -862,7 +1033,7 @@ function renderTesteForm() {
     html += '<div class="form-section"><div class="form-section-title"><span>' + getSectionTitle(prefix, sec) + '</span></div><div id="teste-perguntas-' + sec + '">';
     qs[sec].forEach((q, i) => {
       const id = 'teste-' + sec + '-' + i;
-      html += '<div class="form-question"><span class="form-q-number">' + (i+1) + '</span><span class="form-q-text">' + q + '</span><div class="form-q-options"><button class="form-q-opt" data-id="' + id + '" data-val="c" onclick="selectOpt(this,\'c\')">C</button><button class="form-q-opt" data-id="' + id + '" data-val="nc" onclick="selectOpt(this,\'nc\')">NC</button><button class="form-q-opt" data-id="' + id + '" data-val="na" onclick="selectOpt(this,\'na\')">NA</button></div></div>';
+      html += '<div class="form-question"><div class="form-q-row"><span class="form-q-number">' + (i+1) + '</span><span class="form-q-text">' + q + '</span><div class="form-q-options"><button class="form-q-opt" data-id="' + id + '" data-val="c" onclick="selectOpt(this,\'c\')">C</button><button class="form-q-opt" data-id="' + id + '" data-val="nc" onclick="selectOpt(this,\'nc\')">NC</button><button class="form-q-opt" data-id="' + id + '" data-val="na" onclick="selectOpt(this,\'na\')">NA</button></div></div><div class="nc-motivo" id="motivo-' + id + '"><input type="text" placeholder="Motivo da NC..." data-motivo-id="' + id + '"></div></div>';
     });
     html += '</div></div>';
   });
@@ -872,6 +1043,7 @@ function renderTesteForm() {
 function clearTeste() {
   const area = document.getElementById('teste-form-area');
   area.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
+  area.querySelectorAll('.nc-motivo').forEach(m => { m.classList.remove('visible'); m.querySelector('input').value = ''; });
   document.getElementById('teste-id').value = '';
   updateScore();
 }
