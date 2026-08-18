@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Auditorias - Transportadora</title>
+<title>Sistema de Auditorias - Transportadora Transflorio</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
 <style>
@@ -328,9 +328,9 @@ body {
 
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-brand">Engenharia Jo\u00e3o</div>
+    <div class="login-brand">Engenharia João</div>
     <div class="login-title">Sistema de Auditorias</div>
-    <div class="login-sub">Transportadora</div>
+    <div class="login-sub">Transportadora Transflorio</div>
     <input id="loginPass" type="password" class="login-input" placeholder="Senha de acesso" autofocus onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Entrar</button>
     <p id="loginError" class="login-error">Senha incorreta</p>
@@ -341,7 +341,7 @@ body {
   <div class="topbar">
     <div class="topbar-left">
       <span class="topbar-brand">Auditorias</span>
-      <span class="topbar-title">Transportadora</span>
+      <span class="topbar-title">Transportadora Transflorio</span>
     </div>
     <span class="topbar-company">Transflorio</span>
   </div>
@@ -350,28 +350,28 @@ body {
     <button class="tab-btn active" onclick="switchTab('planejamento')">Planejamento</button>
     <button class="tab-btn" onclick="switchTab('dashboard')">Dashboard</button>
     <button class="tab-btn" onclick="switchTab('frota')">Frota</button>
-    <button class="tab-btn" onclick="switchTab('documentacao')">Documenta\u00e7\u00e3o</button>
+    <button class="tab-btn" onclick="switchTab('documentacao')">Documentação</button>
     <button class="tab-btn" onclick="switchTab('motoristas')">Motoristas</button>
-    <button class="tab-btn" onclick="switchTab('emergencias')">Emerg\u00eancias</button>
+    <button class="tab-btn" onclick="switchTab('emergencias')">Emergências</button>
     <button class="tab-btn" onclick="switchTab('salvas')">Auditorias Salvas</button>
-    <button class="tab-btn test-tab" onclick="switchTab('teste')">\u26a0 Teste</button>
+    <button class="tab-btn test-tab" onclick="switchTab('teste')">&#9888; Teste</button>
   </div>
 
   <div class="tab-content active" id="tab-planejamento">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Planejamento de Auditorias</h2>
     <div class="plan-grid" id="planGrid">
       <div class="plan-card">
-        <div class="plan-card-header"><span class="plan-card-title">Frota / Ve\u00edculos</span><span class="plan-card-badge">4 rotas</span></div>
+        <div class="plan-card-header"><span class="plan-card-title">Frota / Veículos</span><span class="plan-card-badge">4 rotas</span></div>
         <div class="plan-team"><span class="plan-team-name">Rota Capital</span><span class="plan-team-status" id="plan-frota-1">Pendente</span></div>
         <div class="plan-team"><span class="plan-team-name">Rota Interior SP</span><span class="plan-team-status" id="plan-frota-2">Pendente</span></div>
         <div class="plan-team"><span class="plan-team-name">Rota Interestadual Sul</span><span class="plan-team-status" id="plan-frota-3">Pendente</span></div>
         <div class="plan-team"><span class="plan-team-name">Rota Interestadual NE</span><span class="plan-team-status" id="plan-frota-4">Pendente</span></div>
       </div>
       <div class="plan-card">
-        <div class="plan-card-header"><span class="plan-card-title">Documenta\u00e7\u00e3o</span><span class="plan-card-badge">3 \u00e1reas</span></div>
-        <div class="plan-team"><span class="plan-team-name">Licen\u00e7as e Registros</span><span class="plan-team-status" id="plan-doc-1">Pendente</span></div>
+        <div class="plan-card-header"><span class="plan-card-title">Documentação</span><span class="plan-card-badge">3 áreas</span></div>
+        <div class="plan-team"><span class="plan-team-name">Licenças e Registros</span><span class="plan-team-status" id="plan-doc-1">Pendente</span></div>
         <div class="plan-team"><span class="plan-team-name">RNTRC / ANTT</span><span class="plan-team-status" id="plan-doc-2">Pendente</span></div>
-        <div class="plan-team"><span class="plan-team-name">Seguros e Ap\u00f3lices</span><span class="plan-team-status" id="plan-doc-3">Pendente</span></div>
+        <div class="plan-team"><span class="plan-team-name">Seguros e Apólices</span><span class="plan-team-status" id="plan-doc-3">Pendente</span></div>
       </div>
       <div class="plan-card">
         <div class="plan-card-header"><span class="plan-card-title">Motoristas</span><span class="plan-card-badge">3 turnos</span></div>
@@ -380,7 +380,7 @@ body {
         <div class="plan-team"><span class="plan-team-name">Turno C (Noturno)</span><span class="plan-team-status" id="plan-mot-3">Pendente</span></div>
       </div>
       <div class="plan-card">
-        <div class="plan-card-header"><span class="plan-card-title">Equipamentos de Emerg\u00eancia</span><span class="plan-card-badge">2 bases</span></div>
+        <div class="plan-card-header"><span class="plan-card-title">Equipamentos de Emergência</span><span class="plan-card-badge">2 bases</span></div>
         <div class="plan-team"><span class="plan-team-name">Base Matriz</span><span class="plan-team-status" id="plan-emer-1">Pendente</span></div>
         <div class="plan-team"><span class="plan-team-name">Base Filial</span><span class="plan-team-status" id="plan-emer-2">Pendente</span></div>
       </div>
@@ -393,20 +393,20 @@ body {
   <div class="tab-content" id="tab-dashboard">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Dashboard</h2>
     <div class="dash-grid" id="dashGrid">
-      <div class="stat-card"><div class="stat-label">M\u00e9dia Geral</div><div class="stat-value" id="dash-media">--</div><div class="stat-sub" id="dash-media-class">Sem dados</div></div>
+      <div class="stat-card"><div class="stat-label">Média Geral</div><div class="stat-value" id="dash-media">--</div><div class="stat-sub" id="dash-media-class">Sem dados</div></div>
       <div class="stat-card"><div class="stat-label">Auditorias Realizadas</div><div class="stat-value" id="dash-total">0</div><div class="stat-sub" id="dash-total-sub">Total</div></div>
-      <div class="stat-card"><div class="stat-label">N\u00e3o Conformidades</div><div class="stat-value" id="dash-nc" style="color:var(--critical)">0</div><div class="stat-sub" id="dash-nc-sub">Total NC registradas</div></div>
-      <div class="stat-card"><div class="stat-label">Melhor \u00c1rea</div><div class="stat-value" id="dash-melhor" style="font-size:18px">--</div><div class="stat-sub" id="dash-melhor-sub"></div></div>
+      <div class="stat-card"><div class="stat-label">Não Conformidades</div><div class="stat-value" id="dash-nc" style="color:var(--critical)">0</div><div class="stat-sub" id="dash-nc-sub">Total NC registradas</div></div>
+      <div class="stat-card"><div class="stat-label">Melhor Área</div><div class="stat-value" id="dash-melhor" style="font-size:18px">--</div><div class="stat-sub" id="dash-melhor-sub"></div></div>
     </div>
     <div class="ranking-section">
-      <div class="ranking-title">Ranking por \u00c1rea</div>
+      <div class="ranking-title">Ranking por Área</div>
       <table class="ranking-table">
-        <thead><tr><th>Posi\u00e7\u00e3o</th><th>\u00c1rea</th><th>\u00daltima Nota</th><th>M\u00e9dia</th><th>Status</th></tr></thead>
+        <thead><tr><th>Posição</th><th>Área</th><th>Última Nota</th><th>Média</th><th>Status</th></tr></thead>
         <tbody id="dashRanking"></tbody>
       </table>
     </div>
     <div class="chart-section">
-      <div class="ranking-title">Evolu\u00e7\u00e3o por Auditoria</div>
+      <div class="ranking-title">Evolução por Auditoria</div>
       <div class="chart-container"><canvas id="evolutionChart" class="chart-canvas"></canvas></div>
     </div>
   </div>
@@ -414,27 +414,27 @@ body {
   <div class="tab-content" id="tab-frota">
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Frota</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Ve\u00edculo (Placa)</label><input type="text" placeholder="ABC-1D23" id="frota-input-placa"></div>
+      <div class="form-field"><label>Veículo (Placa)</label><input type="text" placeholder="ABC-1D23" id="frota-input-placa"></div>
       <div class="form-field"><label>Motorista</label><input type="text" placeholder="Nome do motorista" id="frota-input-motorista"></div>
       <div class="form-field"><label>Data</label><input type="date" id="frota-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title"><span>Condi\u00e7\u00f5es Gerais do Ve\u00edculo</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-1" onclick="restoreSection('frota',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',1)">Apagar</button></div></div><div id="frota-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title"><span>Sistema de Freios e Suspens\u00e3o</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-2" onclick="restoreSection('frota',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',2)">Apagar</button></div></div><div id="frota-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title"><span>Ilumina\u00e7\u00e3o e Sinaliza\u00e7\u00e3o</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-3" onclick="restoreSection('frota',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',3)">Apagar</button></div></div><div id="frota-perguntas-3"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Condições Gerais do Veículo</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-1" onclick="restoreSection('frota',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',1)">Apagar</button></div></div><div id="frota-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Sistema de Freios e Suspensão</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-2" onclick="restoreSection('frota',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',2)">Apagar</button></div></div><div id="frota-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Iluminação e Sinalização</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-3" onclick="restoreSection('frota',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',3)">Apagar</button></div></div><div id="frota-perguntas-3"></div></div>
     <div class="form-section"><div class="form-section-title"><span>Compartimento de Carga</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-frota-4" onclick="restoreSection('frota',4)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('frota',4)">Apagar</button></div></div><div id="frota-perguntas-4"></div></div>
     <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('frota')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('frota')">Salvar Auditoria</button></div>
   </div>
 
   <div class="tab-content" id="tab-documentacao">
-    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Documenta\u00e7\u00e3o</h2>
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Documentação</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Ve\u00edculo / Setor</label><input type="text" placeholder="Placa ou setor" id="doc-input-setor"></div>
-      <div class="form-field"><label>Respons\u00e1vel</label><input type="text" placeholder="Quem forneceu os docs" id="doc-input-resp"></div>
+      <div class="form-field"><label>Veículo / Setor</label><input type="text" placeholder="Placa ou setor" id="doc-input-setor"></div>
+      <div class="form-field"><label>Responsável</label><input type="text" placeholder="Quem forneceu os docs" id="doc-input-resp"></div>
       <div class="form-field"><label>Data</label><input type="date" id="doc-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title"><span>Documenta\u00e7\u00e3o do Ve\u00edculo</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-1" onclick="restoreSection('doc',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',1)">Apagar</button></div></div><div id="doc-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title"><span>Documenta\u00e7\u00e3o do Motorista</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-2" onclick="restoreSection('doc',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',2)">Apagar</button></div></div><div id="doc-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title"><span>Licen\u00e7as e Registros da Empresa</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-3" onclick="restoreSection('doc',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',3)">Apagar</button></div></div><div id="doc-perguntas-3"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Documentação do Veículo</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-1" onclick="restoreSection('doc',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',1)">Apagar</button></div></div><div id="doc-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Documentação do Motorista</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-2" onclick="restoreSection('doc',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',2)">Apagar</button></div></div><div id="doc-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Licenças e Registros da Empresa</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-doc-3" onclick="restoreSection('doc',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('doc',3)">Apagar</button></div></div><div id="doc-perguntas-3"></div></div>
     <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('doc')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('documentacao')">Salvar Auditoria</button></div>
   </div>
 
@@ -445,22 +445,22 @@ body {
       <div class="form-field"><label>Turno</label><select id="mot-input-turno"><option>Turno A (Diurno)</option><option>Turno B (Vespertino)</option><option>Turno C (Noturno)</option></select></div>
       <div class="form-field"><label>Data</label><input type="date" id="mot-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title"><span>Capacita\u00e7\u00e3o e Treinamento</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-1" onclick="restoreSection('mot',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',1)">Apagar</button></div></div><div id="mot-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Capacitação e Treinamento</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-1" onclick="restoreSection('mot',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',1)">Apagar</button></div></div><div id="mot-perguntas-1"></div></div>
     <div class="form-section"><div class="form-section-title"><span>Uso de EPIs</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-2" onclick="restoreSection('mot',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',2)">Apagar</button></div></div><div id="mot-perguntas-2"></div></div>
     <div class="form-section"><div class="form-section-title"><span>Comportamento e Procedimentos</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-mot-3" onclick="restoreSection('mot',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('mot',3)">Apagar</button></div></div><div id="mot-perguntas-3"></div></div>
     <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('mot')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('motoristas')">Salvar Auditoria</button></div>
   </div>
 
   <div class="tab-content" id="tab-emergencias">
-    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Equipamentos de Emerg\u00eancia</h2>
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Auditoria de Equipamentos de Emergência</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Ve\u00edculo (Placa)</label><input type="text" placeholder="ABC-1D23" id="emer-input-placa"></div>
+      <div class="form-field"><label>Veículo (Placa)</label><input type="text" placeholder="ABC-1D23" id="emer-input-placa"></div>
       <div class="form-field"><label>Base</label><select id="emer-input-base"><option>Base Matriz</option><option>Base Filial</option></select></div>
       <div class="form-field"><label>Data</label><input type="date" id="emer-input-data"></div>
     </div></div>
-    <div class="form-section"><div class="form-section-title"><span>Extintores e Combate a Inc\u00eandio</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-1" onclick="restoreSection('emer',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',1)">Apagar</button></div></div><div id="emer-perguntas-1"></div></div>
-    <div class="form-section"><div class="form-section-title"><span>Kit de Emerg\u00eancia NBR 9735</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-2" onclick="restoreSection('emer',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',2)">Apagar</button></div></div><div id="emer-perguntas-2"></div></div>
-    <div class="form-section"><div class="form-section-title"><span>Sinaliza\u00e7\u00e3o e Pain\u00e9is</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-3" onclick="restoreSection('emer',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',3)">Apagar</button></div></div><div id="emer-perguntas-3"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Extintores e Combate a Incêndio</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-1" onclick="restoreSection('emer',1)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',1)">Apagar</button></div></div><div id="emer-perguntas-1"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Kit de Emergência NBR 9735</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-2" onclick="restoreSection('emer',2)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',2)">Apagar</button></div></div><div id="emer-perguntas-2"></div></div>
+    <div class="form-section"><div class="form-section-title"><span>Sinalização e Painéis</span><div class="section-actions"><button class="section-btn restore-btn" id="restore-emer-3" onclick="restoreSection('emer',3)">Restaurar</button><button class="section-btn delete-btn" onclick="clearSection('emer',3)">Apagar</button></div></div><div id="emer-perguntas-3"></div></div>
     <div class="form-actions"><button class="btn btn-secondary" onclick="clearForm('emer')">Limpar Tudo</button><button class="btn btn-primary" onclick="saveAudit('emergencias')">Salvar Auditoria</button></div>
   </div>
 
@@ -469,22 +469,22 @@ body {
     <div class="saved-filters">
       <button class="filter-btn active" onclick="filterSaved('all')">Todas</button>
       <button class="filter-btn" onclick="filterSaved('frota')">Frota</button>
-      <button class="filter-btn" onclick="filterSaved('documentacao')">Documenta\u00e7\u00e3o</button>
+      <button class="filter-btn" onclick="filterSaved('documentacao')">Documentação</button>
       <button class="filter-btn" onclick="filterSaved('motoristas')">Motoristas</button>
-      <button class="filter-btn" onclick="filterSaved('emergencias')">Emerg\u00eancias</button>
+      <button class="filter-btn" onclick="filterSaved('emergencias')">Emergências</button>
     </div>
     <div class="saved-list" id="savedList"></div>
   </div>
 
   <div class="tab-content" id="tab-teste">
     <div class="test-banner">
-      <span class="test-banner-icon">\u26a0\ufe0f</span>
-      <div><div class="test-banner-text">MODO TESTE</div><div class="test-banner-sub">Dados aqui s\u00e3o independentes. Nada afeta o sistema oficial.</div></div>
+      <span class="test-banner-icon">&#9888;&#65039;</span>
+      <div><div class="test-banner-text">MODO TESTE</div><div class="test-banner-sub">Dados aqui são independentes. Nada afeta o sistema oficial.</div></div>
     </div>
     <h2 style="font-size:18px;font-weight:800;margin-bottom:20px;">Ambiente de Teste</h2>
     <div class="form-header"><div class="form-header-grid">
-      <div class="form-field"><label>Tipo de Auditoria</label><select id="teste-tipo"><option value="frota">Frota</option><option value="documentacao">Documenta\u00e7\u00e3o</option><option value="motoristas">Motoristas</option><option value="emergencias">Emerg\u00eancias</option></select></div>
-      <div class="form-field"><label>Identifica\u00e7\u00e3o</label><input type="text" placeholder="Teste livre" id="teste-id"></div>
+      <div class="form-field"><label>Tipo de Auditoria</label><select id="teste-tipo"><option value="frota">Frota</option><option value="documentacao">Documentação</option><option value="motoristas">Motoristas</option><option value="emergencias">Emergências</option></select></div>
+      <div class="form-field"><label>Identificação</label><input type="text" placeholder="Teste livre" id="teste-id"></div>
       <div class="form-field"><label>Data</label><input type="date" id="teste-data"></div>
     </div></div>
     <div id="teste-form-area"></div>
@@ -501,7 +501,7 @@ body {
 </div>
 
 <div class="score-display" id="scoreDisplay">
-  <div class="score-display-label">Pontua\u00e7\u00e3o</div>
+  <div class="score-display-label">Pontuação</div>
   <div class="score-display-value" id="scoreValue">0%</div>
   <div class="score-display-class" id="scoreClass"></div>
 </div>
@@ -594,7 +594,6 @@ function updateScore() {
   else { scoreEl.style.color = 'var(--critical)'; classEl.textContent = 'Cr\u00edtico'; classEl.style.color = 'var(--critical)'; }
 }
 
-// === CLEAR / RESTORE SECTIONS ===
 function clearSection(prefix, section) {
   const container = document.getElementById(prefix + '-perguntas-' + section);
   if (!container) return;
@@ -630,7 +629,6 @@ function restoreSection(prefix, section) {
   updateScore();
 }
 
-// === SAVE AUDIT (with full responses) ===
 function saveAudit(type) {
   const activeTab = document.querySelector('.tab-content.active');
   const inputs = activeTab.querySelectorAll('input, select');
@@ -654,7 +652,6 @@ function saveAudit(type) {
     responses: responses
   });
   localStorage.setItem('auditorias', JSON.stringify(saved));
-  // Update planejamento
   updatePlanFromSaved();
   alert('Auditoria salva!\n\nTipo: ' + type + '\nNota: ' + score + '%\nClassifica\u00e7\u00e3o: ' + getClass(score));
   clearForm(type === 'documentacao' ? 'doc' : type === 'motoristas' ? 'mot' : type === 'emergencias' ? 'emer' : 'frota');
@@ -678,12 +675,10 @@ function clearForm(prefix) {
   const activeTab = document.querySelector('.tab-content.active');
   activeTab.querySelectorAll('.form-q-opt').forEach(b => b.classList.remove('selected-c','selected-nc','selected-na'));
   activeTab.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
-  // Hide all restore buttons
   activeTab.querySelectorAll('.restore-btn').forEach(b => b.classList.remove('visible'));
   updateScore();
 }
 
-// === PLANEJAMENTO ===
 function updatePlanFromSaved() {
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
   const plan = { frota: [], documentacao: [], motoristas: [], emergencias: [] };
@@ -692,7 +687,6 @@ function updatePlanFromSaved() {
 }
 
 function loadPlanejamento() {
-  const plan = JSON.parse(localStorage.getItem('planejamento') || 'null');
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
   const types = ['frota','documentacao','motoristas','emergencias'];
   const prefixes = { frota: 'frota', documentacao: 'doc', motoristas: 'mot', emergencias: 'emer' };
@@ -722,10 +716,8 @@ function clearPlanejamento() {
   allStatus.forEach(el => { el.textContent = 'Pendente'; el.className = 'plan-team-status status-pending'; });
 }
 
-// === DASHBOARD (pulls from saved audits) ===
 function renderDashboard() {
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
-  // Stats
   const totalAudits = saved.length;
   let totalScore = 0, totalNC = 0;
   saved.forEach(s => { totalScore += s.score; totalNC += (s.ncs || 0); });
@@ -737,7 +729,6 @@ function renderDashboard() {
   document.getElementById('dash-total').textContent = totalAudits;
   document.getElementById('dash-nc').textContent = totalNC;
 
-  // Per-type averages
   const types = ['frota','documentacao','motoristas','emergencias'];
   const typeLabels = { frota:'Frota / Ve\u00edculos', documentacao:'Documenta\u00e7\u00e3o', motoristas:'Motoristas', emergencias:'Emerg\u00eancias' };
   const typeStats = {};
@@ -749,7 +740,6 @@ function renderDashboard() {
     }
   });
 
-  // Best area
   const sorted = Object.entries(typeStats).sort((a,b) => b[1].avg - a[1].avg);
   if (sorted.length > 0) {
     document.getElementById('dash-melhor').textContent = typeLabels[sorted[0][0]];
@@ -759,7 +749,6 @@ function renderDashboard() {
     document.getElementById('dash-melhor-sub').textContent = '';
   }
 
-  // Ranking table
   const tbody = document.getElementById('dashRanking');
   if (sorted.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">Nenhuma auditoria realizada ainda.</td></tr>';
@@ -771,7 +760,6 @@ function renderDashboard() {
     }).join('');
   }
 
-  // Chart
   renderChart(saved);
 }
 
@@ -811,7 +799,6 @@ function renderChart(saved) {
   });
 }
 
-// === SAVED AUDITS (with expand) ===
 function renderSaved(filter) {
   const saved = JSON.parse(localStorage.getItem('auditorias') || '[]');
   const list = document.getElementById('savedList');
@@ -865,7 +852,6 @@ function filterSaved(filter) {
   renderSaved(filter);
 }
 
-// === TEST TAB ===
 function renderTesteForm() {
   const tipo = document.getElementById('teste-tipo').value;
   const prefix = tipo === 'documentacao' ? 'doc' : tipo === 'motoristas' ? 'mot' : tipo === 'emergencias' ? 'emer' : 'frota';
@@ -924,17 +910,13 @@ function renderTeste() {
 }
 
 function initApp() {
-  // Set today's date
   const today = new Date().toISOString().split('T')[0];
   document.querySelectorAll('input[type="date"]').forEach(i => i.value = today);
-  // Render questions
   Object.keys(questions.frota).forEach(s => renderQuestions('frota', s, questions.frota[s]));
   Object.keys(questions.doc).forEach(s => renderQuestions('doc', s, questions.doc[s]));
   Object.keys(questions.mot).forEach(s => renderQuestions('mot', s, questions.mot[s]));
   Object.keys(questions.emer).forEach(s => renderQuestions('emer', s, questions.emer[s]));
-  // Load planejamento
   loadPlanejamento();
-  // Teste type change
   document.getElementById('teste-tipo').addEventListener('change', renderTesteForm);
 }
 </script>
